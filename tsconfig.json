@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+      "module": "es2015",
+      "target": "es2015",
+      "moduleResolution": "node",
+      "jsx": "react-native",
+      "noImplicitAny": false,
+      "experimentalDecorators": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "watch": false,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
+      "lib": [
+        "es2015.promise",
+        "es2015",
+        "es2016"
+      ]
+    },
+    "filesGlob": [
+      "**/*.ts",
+      "**/*.tsx"
+    ],
+    "exclude": [
+
+      "node_modules"
+    ]
+  }
+  
