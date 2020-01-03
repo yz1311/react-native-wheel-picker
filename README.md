@@ -12,10 +12,10 @@
 
 在原库的基础上面，进行了下面的修改:
 
-* 修复几处严重bug，支持RN新版本
-* 添加typescript定义文件
-* 封装多Wheel支持(支持普通和级联模式)
-* 封装常用的DatePicker、RegionPicker、DateRangePicker组件
+* <span style="color: #006AB1;">修复几处严重bug，支持RN新版本</span>
+* <span style="color: #006AB1;">添加typescript定义文件</span>
+* <span style="color: #006AB1;">封装多Wheel支持(支持普通和级联模式)</span>
+* <span style="color: #006AB1;">封装常用的DatePicker、RegionPicker、DateRangePicker组件</span>
 
 由于两端均是原生组件，性能较好，所有的其他组件均是单个wheel在js端实现，后面bug修复可以直接修改js，方便热更新。
 
