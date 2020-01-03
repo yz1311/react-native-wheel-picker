@@ -318,6 +318,7 @@ export default class CommonPicker extends Component<IProps,IState> {
             wheelDatas: wheelDatas,
             wheelSelectedIndexes: wheelSelectedIndexes,
         });
+        this.pickedValue = returnPickerData;
         return {
             wheelDatas,
             wheelSelectedIndexes: wheelSelectedIndexes,
