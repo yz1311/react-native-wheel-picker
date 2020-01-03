@@ -141,12 +141,22 @@ export default class DatePicker extends PureComponent<IProps,IState>{
         return pickerData;
     }
 
-    _onDateChange = (date)=>{
+    _onDateChange = (date, mode)=>{
         let targetDate = null;
         //合并两个date
-        if(this.props.mode=='datetime') {
-            targetDate = moment(moment(this.state.selectedData1).format('YYYY-MM-DD')+moment(this.state.selectedData2).format(' HH:mm:ss')).toDate();
-        } else {
+        if (this.props.mode == 'datetime') {
+            if(mode=='date') {
+                targetDate = moment(this.targetDate)
+                    .year(moment(date).year())
+                    .month(moment(date).month())
+                    .date(moment(date).date());
+            } else if(mode=='time') {
+                targetDate = moment(this.targetDate)
+                    .hour(moment(date).hour())
+                    .minute(moment(date).minute())
+            }
+        }
+        else {
             targetDate = date;
         }
         this.targetDate = targetDate;
@@ -164,8 +174,8 @@ export default class DatePicker extends PureComponent<IProps,IState>{
         if(mode == 'datetime') {
             content = (
                 <View style={{flexDirection: 'row', flex: 1}}>
-                    <DatePickerView style={{width:deviceWidth*0.6}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData1 as any}  mode={this.props.mode} selectedValue={selectedValue1} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
-                    <DatePickerView style={{width:deviceWidth*0.4}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData2 as any}  mode={this.props.mode} selectedValue={selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
+                    <DatePickerView style={{width:deviceWidth*0.6}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData1 as any}  mode={'date'} selectedValue={selectedValue1} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
+                    <DatePickerView style={{width:deviceWidth*0.4}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData2 as any}  mode={'time'} selectedValue={selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
                 </View>
             );
         }
@@ -221,7 +231,7 @@ const DatePickerView:FC<IDatePickerViewProps>=({style,pickerWrapperStyle,pickerD
                           .toDate();
                         break;
                 }
-                onDateChange && onDateChange(date);
+                onDateChange && onDateChange(date,mode);
             }}
         />
     );

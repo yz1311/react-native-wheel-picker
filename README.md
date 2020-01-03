@@ -24,7 +24,7 @@
 
 
 ```
-npm i @yz1311/react-native-wheel-picker@0.2.0-beta11 --save
+npm i @yz1311/react-native-wheel-picker@0.2.0-beta13 --save
 ```
 
 ## 自动集成
