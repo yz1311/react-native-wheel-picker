@@ -128,18 +128,24 @@ export default class CommonPicker extends Component<IProps,IState> {
             }
             for (let index in pickerData) {
                 let wheelData = pickerData[index];
-                if(!Array.isArray(wheelData)) {
-                    console.warn('parallel模式，数组内部也必须全部是数组');
-                    wheelData = [wheelData];
+                //是否是单列数据
+                let isSingleWheel = false;
+                if (!Array.isArray(wheelData)) {
+                    // wheelData = [wheelData];
+                    //说明是异类数据，这种['1',['2','3','4']]
+                    if(pickerData.some(x=>Array.isArray(x))) {
+                        console.warn('parallel模式，数组内部要么全部数组，要么全部字符串/数字');
+                        wheelData = [wheelData];
+                    } else {
+                        //说明是['1','2','3']这种单列数据
+                        isSingleWheel = true;
+                    }
                 }
                 //默认取第一个元素
                 wheelSelectedIndexes[index] = 0;
-                //还原数据
-                if(parseInt(index+'')<=selectedValue.length-1) {
-                    let findIndex = wheelData.findIndex(x=>x==selectedValue[index]);
-                    if(findIndex>0) {
-                        wheelSelectedIndexes[index] = findIndex;
-                    }
+                let findIndex = (isSingleWheel?pickerData:wheelData).findIndex(x => x == selectedValue[index]);
+                if (findIndex > 0) {
+                    wheelSelectedIndexes[index] = findIndex;
                 }
             }
             if(pickerData[0].constructor !== Array){
