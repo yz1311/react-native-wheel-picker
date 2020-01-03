@@ -109,67 +109,80 @@ export default class CommonPicker extends Component<IProps,IState> {
     }
 
     _getStateFromProps(props){
-        //the pickedValue must looks like [wheelone's, wheeltwo's, ...]
+       //the pickedValue must looks like [wheelone's, wheeltwo's, ...]
         //this.state.selectedValue may be the result of the first pickerWheel
-        let {pickerData, selectedValue} = props;
+        let { pickerData, selectedValue } = props;
         //兼容错误数据,并且让picker能展示出来
-        if(pickerData==undefined||Object.keys(pickerData).length==0||pickerData.length==0) {
+        if (pickerData == undefined || Object.keys(pickerData).length == 0 || pickerData.length == 0) {
             pickerData = [['']];
+        }
+        //compatible single wheel sence
+        if (selectedValue && selectedValue.constructor !== Array) {
+            selectedValue = [tempSelectedValue];
         }
         let pickerStyle = pickerData.constructor === Array ? 'parallel' : 'cascade';
         let wheelSelectedIndexes;
-        let cascadeData = {} as any;
-
-        if(pickerStyle === 'parallel'){
-            wheelSelectedIndexes = Array.from({length: pickerData.length});
-            //compatible single wheel sence
-            if(selectedValue&&selectedValue.constructor !== Array){
-                selectedValue = [selectedValue];
-            }
-            for (let index in pickerData) {
-                let wheelData = pickerData[index];
-                //是否是单列数据
-                let isSingleWheel = false;
-                if (!Array.isArray(wheelData)) {
-                    // wheelData = [wheelData];
-                    //说明是异类数据，这种['1',['2','3','4']]
-                    if(pickerData.some(x=>Array.isArray(x))) {
-                        console.warn('parallel模式，数组内部要么全部数组，要么全部字符串/数字');
-                        wheelData = [wheelData];
-                    } else {
-                        //说明是['1','2','3']这种单列数据
-                        isSingleWheel = true;
-                    }
-                }
+        let cascadeData = {};
+        if (pickerStyle === 'parallel') {
+            wheelSelectedIndexes = Array.from({ length: pickerData.length });
+            //是否是单列数据
+            let isSingleWheel = false;
+            //格式化数据
+            if(!pickerData.some(x => Array.isArray(x))) {
+                //全部不是数组
+                //说明是['1','2','3']这种单列数据
+                
+                //设置默认选中值必须要在pickerData重新赋值之前
                 //默认取第一个元素
+                let index = 0
                 wheelSelectedIndexes[index] = 0;
-                let findIndex = (isSingleWheel?pickerData:wheelData).findIndex(x => x == selectedValue[index]);
+                //只会取第一个值，多的值会被忽略
+                let findIndex = pickerData.findIndex(x => x == selectedValue[0]);
                 if (findIndex > 0) {
                     wheelSelectedIndexes[index] = findIndex;
                 }
-            }
-            if(pickerData[0].constructor !== Array){
+                selectedValue[index] = pickerData[wheelSelectedIndexes[index]];
                 pickerData = [pickerData];
+                isSingleWheel = true;
+            } else {   //正常的多列数据
+                //检查是否有非数组
+                if(pickerData.some(x=>!Array.isArray(x))) {
+                    console.warn('parallel模式，数组内部要么全部数组，要么全部字符串/数字');
+                    //如有有，则将非数组全部转换为数组
+                    pickerData = pickerData.map(x=>{
+                        if(Array.isArray(x)) {
+                            return x;
+                        }
+                        return [x];
+                    });
+                }
+                //设置默认值
+                for (let index in pickerData) {
+                    let wheelData = pickerData[index];
+                    //默认取第一个元素
+                    wheelSelectedIndexes[index] = 0;
+                    let findIndex = wheelData.findIndex(x => x == selectedValue[index]);
+                    if (findIndex > 0) {
+                        wheelSelectedIndexes[index] = findIndex;
+                    }
+                    selectedValue[index] = wheelData[wheelSelectedIndexes[index]];
+                }
             }
-            this.wheelSelectedIndexes  = wheelSelectedIndexes;
+
+            this.wheelSelectedIndexes = wheelSelectedIndexes;
+            console.log(wheelSelectedIndexes)
         }
-        else if(pickerStyle === 'cascade'){
+        else if (pickerStyle === 'cascade') {
             //找出级别
-            let maxDeepLength = this._getDeepLength(pickerData,0);
-            wheelSelectedIndexes = Array.from({length: maxDeepLength});
+            let maxDeepLength = this._getDeepLength(pickerData, 0);
+            wheelSelectedIndexes = Array.from({ length: maxDeepLength });
             this.wheelSelectedIndexes = wheelSelectedIndexes;
         }
         //save picked data
         this.pickedValue = JSON.parse(JSON.stringify(selectedValue));
-        this.pickerStyle = pickerStyle as any;
-
-        let result = {
-            ...props,
-            pickerData,
-            selectedValue,
-            wheelDatas: cascadeData.wheelDatas,
-            wheelSelectedIndexes: wheelSelectedIndexes,
-        };
+        this.pickerStyle = pickerStyle;
+        let result = Object.assign(Object.assign({}, props), { pickerData,
+            selectedValue, wheelDatas: cascadeData.wheelDatas, wheelSelectedIndexes: wheelSelectedIndexes });
         return result;
     }
 

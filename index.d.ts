@@ -92,7 +92,7 @@ declare module '@yz1311/react-native-wheel-picker' {
 
     }
 
-    interface IDatePickerProps extends IPickerHeaderProps {
+    interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'> {
       //年月日单位，默认为：年 月 日 时 分 秒
       labelUnit?: {
         year?: string,
@@ -110,12 +110,13 @@ declare module '@yz1311/react-native-wheel-picker' {
       maxDate?: Date,
       //选择模式
       mode?: 'date' | 'time' | 'datetime',
-      onDateChange?: (value:Date)=>void,
+      onDateChange: (value:Date)=>void,
       style?: StyleProp<ViewStyle>,
       //默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
       showHeader?: boolean,
       //包裹picker的容器的样式
       pickerWrapperStyle?: StyleProp<ViewStyle>,
+      onPickerConfirm?: (value:Date)=>void
     }
 
     export class DatePicker extends React.Component<IDatePickerProps,any>{

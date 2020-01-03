@@ -30,7 +30,7 @@ export interface IProps extends IPickerHeaderProps {
     minDate?: Date,
     maxDate?: Date,
     mode?: 'date' | 'time' | 'datetime',
-    onDateChange?: Function,
+    onDateChange: Function,
     style?: StyleProp<ViewStyle>,
     showHeader?: boolean,
     pickerWrapperStyle?: StyleProp<ViewStyle>,
@@ -154,13 +154,13 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     }
 
     render () {
-        const {width:deviceWidth} = Dimensions.get('window');
-        const {labelUnit, mode} = this.props;
+        const { width: deviceWidth } = Dimensions.get('window');
+        const { labelUnit, mode } = this.props;
         let selectedValue1 = moment(this.props.date).format(`YYYY${labelUnit.year},
-        MM${labelUnit.month},DD${labelUnit.date}`).split(',').map(x=>x.trim().replace(/^0+/g,''));
-        let selectedValue2 = moment(this.props.date).format(`HH${labelUnit.month},
-        mm${labelUnit.minute}`).split(',').map(x=>x.trim().replace(/^0+/g,''));
-        let content = (<DatePickerView pickerData={this.state.selectedData1 as any} mode={this.props.mode} selectedValue={selectedValue1} labelUnit={labelUnit} onDateChange={this._onDateChange}/>)
+        MM${labelUnit.month},DD${labelUnit.date}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
+        let selectedValue2 = moment(this.props.date).format(`HH${labelUnit.hour},
+        mm${labelUnit.minute}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
+        let content = (<DatePickerView pickerData={this.state.selectedData1} mode={this.props.mode} selectedValue={mode=='date'?selectedValue1:selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>);
         if(mode == 'datetime') {
             content = (
                 <View style={{flexDirection: 'row', flex: 1}}>
@@ -206,16 +206,19 @@ const DatePickerView:FC<IDatePickerViewProps>=({style,pickerWrapperStyle,pickerD
             pickerData={pickerData}
             selectedValue={selectedValue}
             onValueChange={value => {
-                let date: any;
+                let date;
                 switch (mode) {
                     case 'date':
                         date = moment(value[0].replace(labelUnit.year, '')
                             + '-' + value[1].replace(labelUnit.month, '')
-                            + '-' + value[2].replace(labelUnit.date, ''), 'YYYY-MM-DD').toDate()
+                            + '-' + value[2].replace(labelUnit.date, ''), 'YYYY-MM-DD').toDate();
                         break;
                     case 'time':
-                        date = moment(value[0].replace(labelUnit.hour, '')
-                            + '-' + value[1].replace(labelUnit.minute, ''), moment().format('YYYY-MM-DD') + ' HH:mm').toDate();
+                        date = moment()
+                          .hour(parseInt(value[0].replace(labelUnit.hour, '')))
+                          .minute(parseInt(value[1].replace(labelUnit.minute, '')))
+                          .second(0)
+                          .toDate();
                         break;
                 }
                 onDateChange && onDateChange(date);
