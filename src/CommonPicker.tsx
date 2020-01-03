@@ -111,14 +111,17 @@ export default class CommonPicker extends Component<IProps,IState> {
     _getStateFromProps(props){
        //the pickedValue must looks like [wheelone's, wheeltwo's, ...]
         //this.state.selectedValue may be the result of the first pickerWheel
-        let { pickerData, selectedValue } = props;
+        let { pickerData, selectedValue:tempSelectedValue } = props;
         //兼容错误数据,并且让picker能展示出来
         if (pickerData == undefined || Object.keys(pickerData).length == 0 || pickerData.length == 0) {
             pickerData = [['']];
         }
         //compatible single wheel sence
-        if (selectedValue && selectedValue.constructor !== Array) {
+        let selectedValue = [];
+        if (tempSelectedValue && tempSelectedValue.constructor !== Array) {
             selectedValue = [tempSelectedValue];
+        } else {
+            selectedValue = [...tempSelectedValue];
         }
         let pickerStyle = pickerData.constructor === Array ? 'parallel' : 'cascade';
         let wheelSelectedIndexes;
