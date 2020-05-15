@@ -130,7 +130,7 @@ export default class DatePicker extends PureComponent<IProps,IState>{
         let pickerData:any = {};
         const [hours, minutes] = [[], []];
 
-        for (let i = 0; i <= 24; i += 1) {
+        for (let i = 0; i < 24; i += 1) {
             hours.push(`${i}${this.props.labelUnit.hour}`);
         }
 
