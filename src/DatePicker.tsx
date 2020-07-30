@@ -26,6 +26,7 @@ export interface IProps extends IPickerHeaderProps {
         minute?: string,
         second?: string,
     },
+    //非必填，默认为当前时间
     date?: Date,
     minDate?: Date,
     maxDate?: Date,
@@ -42,25 +43,7 @@ export interface IState {
 }
 
 export default class DatePicker extends PureComponent<IProps,IState>{
-
-    static propTypes = {
-        labelUnit: PropTypes.shape({
-            year: PropTypes.string,
-            month: PropTypes.string,
-            date: PropTypes.string,
-            hour: PropTypes.string,
-            minute: PropTypes.string,
-            second: PropTypes.string,
-        }),
-        //非必填，默认为当前时间
-        date: PropTypes.instanceOf(Date),
-        maxDate: PropTypes.instanceOf(Date),
-        minDate: PropTypes.instanceOf(Date),
-        mode: PropTypes.oneOf(['date', 'time', 'datetime']),
-        onDateChange: PropTypes.func,
-        style: ViewPropTypes.style,
-    };
-
+    
     static defaultProps = {
         showHeader: true,
         labelUnit: { year: '年', month: '月', date: '日', hour: '时', minute: '分', second: '秒' },
