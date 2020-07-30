@@ -24,7 +24,7 @@
 
 
 ```
-npm i @yz1311/react-native-wheel-picker@0.2.0-beta16 --save
+npm i @yz1311/react-native-wheel-picker@0.2.0-beta16  moment --save
 ```
 
 ## 自动集成
@@ -127,10 +127,12 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 
 * ### 日期选择(默认date模式，支持date/time/datetime)
-
+注意: 不管是哪种模式，回调返回的数据都是一个date对象，具体的数值需要自己去转换
 ```
 <DatePicker
         mode={'date'}
+        //date值可以不填，默认是当前时间
+        date={new Date()}
         />
 ```
 ![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6pgdtf5aj30bx08474n.jpg)
@@ -159,6 +161,43 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 ```
 
 ![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6pskjshtj30c0084aaj.jpg)
+
+
+* ### 结合Modal使用
+大部分情况下Picker都不是只作为view使用，而是底部弹窗选择，下面是[react-native-modal](https://github.com/react-native-community/react-native-modal)为例的代码:
+
+```javascript
+<Modal
+                style={{flex:1, justifyContent:'flex-end',margin: 0}}
+                isVisible={selectDateVisible}
+                onBackdropPress={()=>{
+                    setSelectDateVisible(false);
+                }}
+                onBackButtonPress={()=>{
+                    setSelectDateVisible(false);
+                }}
+                >
+                //所有的picker是默认显示header的
+                <DatePicker
+                    pickerTitle='预约时间'
+                    date={ruleForm.appointmentTime}
+                    mode={'datetime'}
+                    onPickerCancel={()=>{
+                        setSelectDateVisible(false);
+                    }}
+                    onPickerConfirm={date=>{
+                        setRuleForm(prevState => ({
+                            ...prevState,
+                            appointmentTime: date
+                        }));
+                        setSelectDateVisible(false);
+                    }}
+                    //大部分情况下不用关注date改变时的数据，下面方法可以删除
+                    onDateChange={()=>{}}
+                />
+            </Modal>
+```
+
 
 ## 截图(android/iOS)
 

@@ -110,7 +110,7 @@ declare module '@yz1311/react-native-wheel-picker' {
       maxDate?: Date,
       //选择模式
       mode?: 'date' | 'time' | 'datetime',
-      onDateChange: (value:Date)=>void,
+      onDateChange?: (value:Date)=>void,
       style?: StyleProp<ViewStyle>,
       //默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
       showHeader?: boolean,

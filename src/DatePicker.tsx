@@ -4,10 +4,10 @@
 
 import React, {FC, PureComponent} from "react";
 import {
-    ColorPropType, 
+    ColorPropType,
     StyleProp,
     View,
-    ViewPropTypes, 
+    ViewPropTypes,
     ViewStyle,
     Dimensions
 } from "react-native";
@@ -30,7 +30,7 @@ export interface IProps extends IPickerHeaderProps {
     minDate?: Date,
     maxDate?: Date,
     mode?: 'date' | 'time' | 'datetime',
-    onDateChange: Function,
+    onDateChange?: Function,
     style?: StyleProp<ViewStyle>,
     showHeader?: boolean,
     pickerWrapperStyle?: StyleProp<ViewStyle>,
@@ -52,11 +52,12 @@ export default class DatePicker extends PureComponent<IProps,IState>{
             minute: PropTypes.string,
             second: PropTypes.string,
         }),
-        date: PropTypes.instanceOf(Date).isRequired,
+        //非必填，默认为当前时间
+        date: PropTypes.instanceOf(Date),
         maxDate: PropTypes.instanceOf(Date),
         minDate: PropTypes.instanceOf(Date),
         mode: PropTypes.oneOf(['date', 'time', 'datetime']),
-        onDateChange: PropTypes.func.isRequired,
+        onDateChange: PropTypes.func,
         style: ViewPropTypes.style,
     };
 
@@ -101,7 +102,8 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                 };
                 break;
         }
-        this.targetDate = props.date;
+        //必须要给一个默认值，默认为当前时间
+        this.targetDate = props.date || moment().second(0).toDate();
     }
 
     //生成日期数据 ，xxxx年xx月xx日
@@ -149,11 +151,13 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                 targetDate = moment(this.targetDate)
                     .year(moment(date).year())
                     .month(moment(date).month())
-                    .date(moment(date).date());
+                    .day(moment(date).day());
             } else if(mode=='time') {
                 targetDate = moment(this.targetDate)
                     .hour(moment(date).hour())
                     .minute(moment(date).minute())
+                    //秒忽略不计
+                    .second(0);
             }
         }
         else {
@@ -166,9 +170,11 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     render () {
         const { width: deviceWidth } = Dimensions.get('window');
         const { labelUnit, mode } = this.props;
-        let selectedValue1 = moment(this.props.date).format(`YYYY${labelUnit.year},
+        //null ''传给moment都是无效参数，undefined相当于创建当前时间
+        let initialDate = this.props.date || undefined;
+        let selectedValue1 = moment(initialDate).format(`YYYY${labelUnit.year},
         MM${labelUnit.month},DD${labelUnit.date}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
-        let selectedValue2 = moment(this.props.date).format(`HH${labelUnit.hour},
+        let selectedValue2 = moment(initialDate).format(`HH${labelUnit.hour},
         mm${labelUnit.minute}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
         let content = (<DatePickerView pickerData={this.state.selectedData1} mode={this.props.mode} selectedValue={mode=='date'?selectedValue1:selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>);
         if(mode == 'datetime') {
@@ -199,7 +205,7 @@ export default class DatePicker extends PureComponent<IProps,IState>{
 
 export interface IDatePickerViewProps {
     style?:StyleProp<ViewStyle>,
-    pickerWrapperStyle?:Pick<ICommonPickerProps,'pickerWrapperStyle'>,
+    pickerWrapperStyle?:StyleProp<ViewStyle>,
     pickerData: any,
     selectedValue: any,
     labelUnit: any,

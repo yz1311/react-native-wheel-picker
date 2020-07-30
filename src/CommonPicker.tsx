@@ -78,17 +78,13 @@ export default class CommonPicker extends Component<IProps,IState> {
         }
     }
 
-    componentWillReceiveProps(newProps){
+    UNSAFE_componentWillReceiveProps(newProps: Readonly<IProps>, nextContext: any): void {
         let newState = this._getStateFromProps(newProps);
         this.setState(newState,()=>{
             if(this.pickerStyle == 'cascade') {
                 this._getCascadeData(newProps.pickerData,true, newProps.selectedValue);
             }
         });
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
-        this.componentWillReceiveProps(nextProps);
     }
 
     //获取级联对象的深度
