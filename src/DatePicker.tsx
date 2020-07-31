@@ -134,7 +134,7 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                 targetDate = moment(this.targetDate)
                     .year(moment(date).year())
                     .month(moment(date).month())
-                    .day(moment(date).day());
+                    .date(moment(date).date());
             } else if(mode=='time') {
                 targetDate = moment(this.targetDate)
                     .hour(moment(date).hour())

@@ -24,7 +24,7 @@
 
 
 ```
-npm i @yz1311/react-native-wheel-picker@0.2.0-beta16  moment --save
+npm i @yz1311/react-native-wheel-picker@0.2.0-beta19  moment --save
 ```
 
 ## 自动集成
