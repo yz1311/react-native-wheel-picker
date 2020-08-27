@@ -30,7 +30,7 @@ export interface IProps extends IPickerHeaderProps {
     date?: Date,
     minDate?: Date,
     maxDate?: Date,
-    mode?: 'date' | 'time' | 'datetime',
+    mode?: 'year' | 'month' | 'date' | 'time' | 'datetime',
     onDateChange?: Function,
     style?: StyleProp<ViewStyle>,
     showHeader?: boolean,
@@ -38,18 +38,19 @@ export interface IProps extends IPickerHeaderProps {
 }
 
 export interface IState {
-    selectedData1?: Date,
-    selectedData2?: Date
+    pickerData?: Array<any>,
+    //默认选中的值，传递给CommonPicker设置默认值
+    selectedDateArray: Array<string>;
 }
 
 export default class DatePicker extends PureComponent<IProps,IState>{
-    
+
     static defaultProps = {
         showHeader: true,
         labelUnit: { year: '年', month: '月', date: '日', hour: '时', minute: '分', second: '秒' },
         mode: 'date',
         maxDate: moment().add(10, 'years').toDate(),
-        minDate: moment().add(-10, 'years').toDate(),
+        minDate: moment().add(-30, 'years').toDate(),
         date: new Date(),
         style: null,
         textColor: '#333',
@@ -58,56 +59,150 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     };
 
     readonly state:IState = {
-        selectedData1: null,
-        selectedData2: null,
+        pickerData: [],
+        selectedDateArray: []
     };
 
-    private targetDate:any;
+    //当前选择的时间对象
+    private targetDate: Date;
 
-    constructor(props:IProps) {
-        super(props);
-        switch (props.mode) {
-            case 'date':
-                this.state = {
-                    selectedData1: this._genDateData(props),
-                };
-                break;
-                //只选择时分,时分不关联
-            case 'time':
-                this.state = {
-                    selectedData1: this._genTimeData(props),
-                };
-                break;
-            case 'datetime':
-                this.state = {
-                    selectedData1: this._genDateData(props),
-                    selectedData2: this._genTimeData(props)
-                };
-                break;
-        }
-        //必须要给一个默认值，默认为当前时间
-        this.targetDate = props.date || moment().second(0).toDate();
+    componentDidMount() {
+        this._setDefaultValue();
+        this.setState({
+            pickerData: this._genData()
+        });
     }
 
-    //生成日期数据 ，xxxx年xx月xx日
-    _genDateData = (props)=>{
-        let pickerData:any = {};
-        let daysLength = moment(props.maxDate).diff(moment(props.minDate),'days');
-        for (let i=0;i<=daysLength;i++) {
-            let date = moment(props.minDate).add(i,'day');
-            let yearKey = date.year()+props.labelUnit.year;
-            let monthKey = (date.month()+1)+props.labelUnit.month;
-            let dayKey = date.date()+props.labelUnit.date;
-            //@ts-ignore
-            if(pickerData[yearKey]==undefined) {
-                pickerData[yearKey] = {};
-            }
-            if(pickerData[yearKey][monthKey]==undefined) {
-                pickerData[yearKey][monthKey] = [];
-            }
-            pickerData[yearKey][monthKey].push(dayKey);
+
+    componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
+        if(this.props.date !== prevProps.date ||
+            this.props.minDate !== prevProps.minDate ||
+            this.props.maxDate !== prevProps.maxDate) {
+            this._setDefaultValue();
         }
-        return pickerData;
+    }
+
+    _setDefaultValue = (props:IProps = this.props)=>{
+        //必须要给一个默认值，默认为当前时间
+        if(!props.date
+            || moment(props.date).isBefore(props.minDate)
+            || moment(props.date).isAfter(props.maxDate)) {
+            this.targetDate = moment().second(0).toDate();
+        } else {
+            this.targetDate = props.date;
+        }
+        const { labelUnit, mode } = props;
+        let dataArray = [];
+        let yearWithUnit = moment(this.targetDate).year()+labelUnit.year;
+        let monthWithUnit = (moment(this.targetDate).month()+1)+labelUnit.month;
+        let dateWithUnit = moment(this.targetDate).date()+labelUnit.date;
+        let hourWithUnit = moment(this.targetDate).hour()+labelUnit.hour;
+        let minuteWithUnit = moment(this.targetDate).minute()+labelUnit.minute;
+        switch (props.mode) {
+            case 'year':
+                dataArray = [yearWithUnit];
+                break;
+            case 'month':
+                dataArray = [yearWithUnit, monthWithUnit];
+                break;
+            case 'date':
+                dataArray = [yearWithUnit, monthWithUnit, dateWithUnit];
+                break;
+            case 'time':
+                dataArray = [hourWithUnit, minuteWithUnit];
+                break;
+            case 'datetime':
+                dataArray = [yearWithUnit, monthWithUnit, dateWithUnit, hourWithUnit, minuteWithUnit];
+                break;
+        }
+        this.setState({
+            selectedDateArray: dataArray
+        });
+    }
+
+    _genData = (props:IProps = this.props) => {
+        //年份
+        let years = new Set();
+        let yearDiff = moment(props.maxDate).diff(moment(props.minDate),'years');
+        for (let i = 0;i<yearDiff;i++) {
+            years.add((moment(props.minDate).year()+i)+props.labelUnit.year);
+        }
+        let currentYear = moment(this.targetDate).year();
+        //0-11
+        let currentMonth = moment(this.targetDate).month();
+
+        //月份
+        let monthes = this._getMonthesByYear(props, currentMonth);
+
+        //天数
+        let days = this._getDaysByYearAndMonth(props, currentYear, currentMonth);
+
+        switch (props.mode) {
+            case 'year':
+                return [Array.from(years)];
+            case 'month':
+                return [Array.from(years), Array.from(monthes)]
+            case 'date':
+                return [Array.from(years), Array.from(monthes), Array.from(days)]
+            case 'time':
+                return this._genTimeData(props);
+            case 'datetime':
+                return [Array.from(years), Array.from(monthes), Array.from(days), ...this._genTimeData(props)];
+                break;
+            default:
+                return [];
+        }
+    }
+
+    _getMonthesByYear = (props:IProps = this.props, currentYear)=>{
+        //月份(moment取到的月份是0-11)
+        let monthes = new Set();
+        if(props.mode !== 'year' && props.mode !== 'time') {
+            //默认是12个月
+            for (let i = 1; i <= 12; i++) {
+                monthes.add(i + props.labelUnit.month);
+            }
+            //如果跟最小值的年份一样，去除之前的月份
+            if (moment(props.minDate).year() === currentYear) {
+                for (let i = 1; i < moment(props.minDate).month() + 1; i++) {
+                    monthes.delete(i + props.labelUnit.month)
+                }
+            }
+            //如果跟最大值的年份一样，去除之后的月份
+            if (moment(props.maxDate).year() === currentYear) {
+                for (let i = moment(props.minDate).month() + 2; i <= 12; i++) {
+                    monthes.delete(i + props.labelUnit.month)
+                }
+            }
+        }
+        return monthes;
+    }
+
+    _getDaysByYearAndMonth = (props:IProps = this.props, currentYear, currentMonth)=>{
+        let days = new Set();
+        if(props.mode !== 'year' && props.mode !== 'month' && props.mode !== 'time') {
+            //获取当前年月的天数
+            let daysInMonth = moment().year(currentYear).month(currentMonth).daysInMonth();
+            for (let i = 1; i <= daysInMonth; i++) {
+                days.add(i + props.labelUnit.date);
+            }
+            //如果跟最小值的年份月份一样，去除之前的天数
+            if (moment(props.minDate).year() === currentYear &&
+                moment(props.minDate).month() === currentMonth) {
+                for (let i = 1; i < moment(props.minDate).date(); i++) {
+                    days.delete(i + props.labelUnit.date)
+                }
+            }
+            //如果跟最大值的年份月份一样，去除之后的天数
+            if (moment(props.maxDate).year() === currentYear &&
+                moment(props.maxDate).month() === currentMonth) {
+                //最多是31天
+                for (let i = moment(props.maxDate).date() + 1; i <= 31; i++) {
+                    days.delete(i + props.labelUnit.date)
+                }
+            }
+        }
+        return days;
     }
 
     //生成时间数据，xx时xx分，不支持秒
@@ -126,48 +221,125 @@ export default class DatePicker extends PureComponent<IProps,IState>{
         return pickerData;
     }
 
-    _onDateChange = (date, mode)=>{
-        let targetDate = null;
-        //合并两个date
-        if (this.props.mode == 'datetime') {
-            if(mode=='date') {
-                targetDate = moment(this.targetDate)
-                    .year(moment(date).year())
-                    .month(moment(date).month())
-                    .date(moment(date).date());
-            } else if(mode=='time') {
-                targetDate = moment(this.targetDate)
-                    .hour(moment(date).hour())
-                    .minute(moment(date).minute())
-                    //秒忽略不计
-                    .second(0);
+    _getNewMonthesAndSelectedMonthByYear = (yearWithUnit, monthWithUnit) =>{
+        const {mode, labelUnit} = this.props;
+        let nextMonthes = this._getMonthesByYear(this.props, parseInt(yearWithUnit.replace(labelUnit.year, '')));
+        //如果更新的月份依旧存在
+        let nextMonthArray = Array.from(nextMonthes);
+        if(nextMonthes.has(monthWithUnit)) {
+            return [nextMonthArray, monthWithUnit];
+        } else {
+            //没有，则默认选中第一个月份
+            return [nextMonthArray, nextMonthArray[0]]
+        }
+    }
+
+
+    _getNewDaysAndSelectedDayByYearAndMonth = (yearWithUnit, monthWithUnit, dayWithUnit)=>{
+        const {mode, labelUnit} = this.props;
+        let nextDays = this._getDaysByYearAndMonth(this.props,
+            parseInt(yearWithUnit.replace(labelUnit.year, '')),
+            parseInt(monthWithUnit.replace(labelUnit.month, ''))-1);
+        //如果更新的月份依旧存在
+        let nextDayArray = Array.from(nextDays);
+        if(nextDays.has(dayWithUnit)) {
+            return [nextDayArray, dayWithUnit];
+        } else {
+            //原来是28(一个月最少28天)以上，并且新的当月天数小于原来的数字，夸月导致的变更，直接选最后一天
+            let lastDayInt = parseInt(dayWithUnit.replace(labelUnit.date, ''));
+            //选择最后一天
+            if(lastDayInt>28 && nextDayArray.length<lastDayInt) {
+                return [nextDayArray, nextDayArray[nextDayArray.length-1]];
             }
+            //否则选择第一天(此时是因为最大值和最小值引起的变更)
+            return [nextDayArray, nextDayArray[0]]
         }
-        else {
-            targetDate = date;
+    }
+
+    //根据数组转换成moment对象
+    _dataArrayToMoment = (dataArray: Array<any>)=>{
+        const {mode,labelUnit } = this.props;
+        let date = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
+        switch (mode) {
+            case 'year':
+                date.year(dataArray[0].replace(labelUnit.year, ''));
+                break;
+            case 'month':
+                date.year(dataArray[0].replace(labelUnit.year, ''))
+                    .month(parseInt(dataArray[1].replace(labelUnit.month, ''))-1);
+                break;
+            case 'date':
+                date.year(dataArray[0].replace(labelUnit.year, ''))
+                    .month(parseInt(dataArray[1].replace(labelUnit.month, ''))-1)
+                    .date(dataArray[2].replace(labelUnit.date, ''));
+                break;
+            case 'time':
+                date.hour(dataArray[0].replace(labelUnit.hour, ''))
+                    .minute(dataArray[1].replace(labelUnit.minute, ''));
+                break;
+            case 'datetime':
+                date.year(dataArray[0].replace(labelUnit.year, ''))
+                    .month(parseInt(dataArray[1].replace(labelUnit.month, ''))-1)
+                    .date(dataArray[2].replace(labelUnit.date, ''))
+                    .hour(dataArray[3].replace(labelUnit.hour, ''))
+                    .minute(dataArray[4].replace(labelUnit.minute, ''));
+                break;
         }
-        this.targetDate = targetDate;
-        this.props.onDateChange&&this.props.onDateChange(targetDate);
+        return date;
+    }
+
+    _onDateChange = (value, wheelIndex)=>{
+        const {mode, labelUnit} = this.props;
+        //虽然值改变了，但是实际选中的值可能会变化
+        let nextValue = [...value];
+        let nextPickerData = [...this.state.pickerData];
+        switch (mode) {
+            case 'year':
+                //不用说，直接改变即可
+
+                break;
+            case 'month':
+                //改变的是年份
+                //可能会根据最大最小时间影响月份的数据
+                if(wheelIndex == 0) {
+                    const [monthes, newMonthWithUnit] = this._getNewMonthesAndSelectedMonthByYear(value[0], value[1]);
+                    nextValue[1] = newMonthWithUnit;
+                    nextPickerData[1] = monthes;
+                } else {
+                    //月份没啥影响
+                }
+                break;
+            case 'date':
+            //必须是date在前，time在后的形式才能合并
+            case 'datetime':
+                if(wheelIndex === 0) {
+                    const [monthes, newMonthWithUnit] = this._getNewMonthesAndSelectedMonthByYear(value[0], value[1]);
+                    const [days, newDayWithUnit] = this._getNewDaysAndSelectedDayByYearAndMonth(value[0], newMonthWithUnit, value[2]);
+                    nextValue[1] = newMonthWithUnit;
+                    nextValue[2] = newDayWithUnit;
+                    nextPickerData[1] = monthes;
+                    nextPickerData[2] = days;
+                } else if(wheelIndex === 1) {
+                    const [days, newDayWithUnit] = this._getNewDaysAndSelectedDayByYearAndMonth(value[0], value[1], value[2]);
+                    nextValue[2] = newDayWithUnit;
+                    nextPickerData[2] = days;
+                } else if(wheelIndex === 2) {
+                    //没啥影响
+                }
+                break;
+        }
+        let nextDate = this._dataArrayToMoment(nextValue);
+        this.setState({
+            selectedDateArray: nextValue,
+            pickerData: nextPickerData
+        });
+        this.targetDate = nextDate.toDate();
+        this.props.onDateChange&&this.props.onDateChange(nextDate.toDate());
     }
 
     render () {
+        const {mode, labelUnit} = this.props;
         const { width: deviceWidth } = Dimensions.get('window');
-        const { labelUnit, mode } = this.props;
-        //null ''传给moment都是无效参数，undefined相当于创建当前时间
-        let initialDate = this.props.date || undefined;
-        let selectedValue1 = moment(initialDate).format(`YYYY${labelUnit.year},
-        MM${labelUnit.month},DD${labelUnit.date}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
-        let selectedValue2 = moment(initialDate).format(`HH${labelUnit.hour},
-        mm${labelUnit.minute}`).split(',').map(x => x.trim().replace(/^0+/g, ''));
-        let content = (<DatePickerView pickerData={this.state.selectedData1} mode={this.props.mode} selectedValue={mode=='date'?selectedValue1:selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>);
-        if(mode == 'datetime') {
-            content = (
-                <View style={{flexDirection: 'row', flex: 1}}>
-                    <DatePickerView style={{width:deviceWidth*0.6}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData1 as any}  mode={'date'} selectedValue={selectedValue1} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
-                    <DatePickerView style={{width:deviceWidth*0.4}} pickerWrapperStyle={this.props.pickerWrapperStyle} pickerData={this.state.selectedData2 as any}  mode={'time'} selectedValue={selectedValue2} labelUnit={labelUnit} onDateChange={this._onDateChange}/>
-                </View>
-            );
-        }
         return (
             <View style={[{minHeight:240+(this.props.showHeader?40:0)},this.props.style]}>
                 {this.props.showHeader ?
@@ -180,7 +352,16 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                     :
                     null
                 }
-                {content}
+                <CommonPicker
+                    style={{width:deviceWidth}}
+                    pickerWrapperStyle={this.props.pickerWrapperStyle}
+                    showHeader={false}
+                    pickerData={this.state.pickerData}
+                    selectedValue={this.state.selectedDateArray}
+                    onValueChange={(value, wheelIndex) => {
+                        this._onDateChange(value, wheelIndex);
+                    }}
+                />
             </View>
         );
     }
@@ -194,34 +375,4 @@ export interface IDatePickerViewProps {
     labelUnit: any,
     onDateChange: any,
     mode: any
-}
-
-const DatePickerView:FC<IDatePickerViewProps>=({style,pickerWrapperStyle,pickerData,selectedValue,labelUnit,onDateChange,mode})=>{
-    return (
-        <CommonPicker
-            style={style}
-            pickerWrapperStyle={pickerWrapperStyle}
-            showHeader={false}
-            pickerData={pickerData}
-            selectedValue={selectedValue}
-            onValueChange={value => {
-                let date;
-                switch (mode) {
-                    case 'date':
-                        date = moment(value[0].replace(labelUnit.year, '')
-                            + '-' + value[1].replace(labelUnit.month, '')
-                            + '-' + value[2].replace(labelUnit.date, ''), 'YYYY-MM-DD').toDate();
-                        break;
-                    case 'time':
-                        date = moment()
-                          .hour(parseInt(value[0].replace(labelUnit.hour, '')))
-                          .minute(parseInt(value[1].replace(labelUnit.minute, '')))
-                          .second(0)
-                          .toDate();
-                        break;
-                }
-                onDateChange && onDateChange(date,mode);
-            }}
-        />
-    );
 }

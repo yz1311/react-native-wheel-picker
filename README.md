@@ -24,7 +24,7 @@
 
 
 ```
-npm i @yz1311/react-native-wheel-picker@0.2.0-beta19  moment --save
+npm i @yz1311/react-native-wheel-picker  moment --save
 ```
 
 ## 自动集成
@@ -126,8 +126,19 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 ![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6pbbo92bj30c0085aa9.jpg)
 
 
-* ### 日期选择(默认date模式，支持date/time/datetime)
+* ### 日期选择(默认date模式，支持year/month/date/time/datetime)
 注意: 不管是哪种模式，回调返回的数据都是一个date对象，具体的数值需要自己去转换
+
+> `year:` 选择年份
+
+> `month:` 选择年月
+
+> `date:` 选择年月日
+
+> `time:` 选择时分
+
+> `datetime:` 选择年月日时分(minDate和maxDate无法影响到时分，只能影响到日期,譬如:minDate设置为2010-01-01 08:00:00,依旧可以选择当天00:00~23:59的时间段)
+
 ```
 <DatePicker
         mode={'date'}
