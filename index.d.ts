@@ -109,7 +109,7 @@ declare module '@yz1311/react-native-wheel-picker' {
       //最大日期,默认为当前时间的后10年
       maxDate?: Date,
       //选择模式
-      mode?: 'date' | 'time' | 'datetime',
+      mode?: 'year' | 'month' | 'date' | 'time' | 'datetime',
       onDateChange?: (value:Date)=>void,
       style?: StyleProp<ViewStyle>,
       //默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效

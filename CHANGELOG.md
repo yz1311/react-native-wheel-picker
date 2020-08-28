@@ -1,3 +1,8 @@
+# [0.2.1]() (2020-08-28)
+* 修复DatePicker对年份和月份处理有误
+* DatePicker添加对错误参数的兼容处理 
+* 修复DatePicker的ts定义
+
 # [0.2.0]() (2020-08-27)
 * 重写DatePicker组件，底层实现从cascade模式改为parallel模式，性能有了很大提升,有些默认行为发生了变化
   

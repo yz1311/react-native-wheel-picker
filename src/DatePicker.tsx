@@ -9,7 +9,8 @@ import {
     View,
     ViewPropTypes,
     ViewStyle,
-    Dimensions
+    Dimensions,
+    Text
 } from "react-native";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -83,13 +84,16 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     }
 
     _setDefaultValue = (props:IProps = this.props)=>{
-        //必须要给一个默认值，默认为当前时间
-        if(!props.date
-            || moment(props.date).isBefore(props.minDate)
-            || moment(props.date).isAfter(props.maxDate)) {
+        //必须要给一个默认值，否则默认为当前时间
+        if(!props.date || !moment(props.date).isValid()) {
             this.targetDate = moment().second(0).toDate();
-        } else {
+        }  else {
             this.targetDate = props.date;
+        }
+        //如果超过范围，则默认显示最小值
+        if(moment(this.targetDate).isBefore(props.minDate)
+            || moment(this.targetDate).isAfter(props.maxDate)) {
+            this.targetDate = moment(props.minDate).toDate();
         }
         const { labelUnit, mode } = props;
         let dataArray = [];
@@ -121,18 +125,23 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     }
 
     _genData = (props:IProps = this.props) => {
+        if(moment(props.maxDate).isBefore(moment(props.minDate))
+            || !moment(props.minDate).isValid()
+            || !moment(props.maxDate).isValid()) {
+            console.log('maxDate不能小于minDate')
+            return [];
+        }
         //年份
         let years = new Set();
-        let yearDiff = moment(props.maxDate).diff(moment(props.minDate),'years');
-        for (let i = 0;i<yearDiff;i++) {
-            years.add((moment(props.minDate).year()+i)+props.labelUnit.year);
+        for (let i = moment(props.minDate).year();i<=moment(props.maxDate).year();i++) {
+            years.add(i+props.labelUnit.year);
         }
         let currentYear = moment(this.targetDate).year();
         //0-11
         let currentMonth = moment(this.targetDate).month();
 
         //月份
-        let monthes = this._getMonthesByYear(props, currentMonth);
+        let monthes = this._getMonthesByYear(props, currentYear);
 
         //天数
         let days = this._getDaysByYearAndMonth(props, currentYear, currentMonth);
@@ -170,7 +179,7 @@ export default class DatePicker extends PureComponent<IProps,IState>{
             }
             //如果跟最大值的年份一样，去除之后的月份
             if (moment(props.maxDate).year() === currentYear) {
-                for (let i = moment(props.minDate).month() + 2; i <= 12; i++) {
+                for (let i = moment(props.maxDate).month() + 2; i <= 12; i++) {
                     monthes.delete(i + props.labelUnit.month)
                 }
             }
@@ -178,6 +187,7 @@ export default class DatePicker extends PureComponent<IProps,IState>{
         return monthes;
     }
 
+    //currentMonth是0-11
     _getDaysByYearAndMonth = (props:IProps = this.props, currentYear, currentMonth)=>{
         let days = new Set();
         if(props.mode !== 'year' && props.mode !== 'month' && props.mode !== 'time') {
@@ -352,16 +362,22 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                     :
                     null
                 }
-                <CommonPicker
-                    style={{width:deviceWidth}}
-                    pickerWrapperStyle={this.props.pickerWrapperStyle}
-                    showHeader={false}
-                    pickerData={this.state.pickerData}
-                    selectedValue={this.state.selectedDateArray}
-                    onValueChange={(value, wheelIndex) => {
-                        this._onDateChange(value, wheelIndex);
-                    }}
-                />
+                {this.state.pickerData.length > 0 ?
+                    <CommonPicker
+                        style={{width: deviceWidth}}
+                        pickerWrapperStyle={this.props.pickerWrapperStyle}
+                        showHeader={false}
+                        pickerData={this.state.pickerData}
+                        selectedValue={this.state.selectedDateArray}
+                        onValueChange={(value, wheelIndex) => {
+                            this._onDateChange(value, wheelIndex);
+                        }}
+                    />
+                    :
+                    <View style={[{flex:1, backgroundColor:'white', justifyContent:'center', alignItems:'center'}, this.props.pickerWrapperStyle]}>
+                        <Text style={{fontSize: 16, color:'#999999'}}>数据异常,请检查参数</Text>
+                    </View>
+                }
             </View>
         );
     }
