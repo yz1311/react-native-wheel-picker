@@ -171,7 +171,6 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 ```
 <RegionPicker
-        data={require('pca-code.json')}
         onPickerConfirm={(names, codes)=>{
             //names: ["上海市", "市辖区", "黄浦区"]
             //codes: ["31", "3101", "310101"]
