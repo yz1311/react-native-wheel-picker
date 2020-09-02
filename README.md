@@ -162,8 +162,16 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 * ### 地址选择
 
+项目的数据来自于[Administrative-divisions-of-China](https://github.com/modood/Administrative-divisions-of-China) 的 [pca-code.json](https://github.com/modood/Administrative-divisions-of-China/blob/master/dist/pca-code.json),
+
+项目里面已经自带该数据源，也可以用`data={require('pca-code.json')}`的方式自定义数据源，但必须符合格式
+
+如果需要二级、四级、五级等其它联动模式，可以直接按照[RegionPicker](https://github.com/yz1311/react-native-wheel-picker/blob/master/src/RegionPicker.tsx)改写一下就行了(或者提issues我加上)
+
+
 ```
 <RegionPicker
+        data={require('pca-code.json')}
         onPickerConfirm={(names, codes)=>{
             //names: ["上海市", "市辖区", "黄浦区"]
             //codes: ["31", "3101", "310101"]
