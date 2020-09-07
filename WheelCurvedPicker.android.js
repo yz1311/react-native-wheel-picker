@@ -8,7 +8,6 @@ import {
   StyleSheet
 } from "react-native";
 import PropTypes from "prop-types";
-const createReactClass = require("create-react-class");
 
 class WheelCurvedPicker extends React.Component {
   static propTypes = {
@@ -43,7 +42,7 @@ class WheelCurvedPicker extends React.Component {
     super(props);
     this.state = this._stateFromProps(props);
   }
-  
+
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
     if(prevProps !== this.props) {
       this.setState(this._stateFromProps(this.props));
@@ -101,17 +100,15 @@ class WheelCurvedPicker extends React.Component {
   }
 }
 
-WheelCurvedPicker.Item = createReactClass({
-  propTypes: {
-    value: PropTypes.any, // string or integer basically
-    label: PropTypes.string
-  },
+WheelCurvedPicker.Item = function ({label, value}) {
+  // These items don't get rendered directly.
+  return null;
+}
 
-  render: function() {
-    // These items don't get rendered directly.
-    return null;
-  }
-});
+WheelCurvedPicker.Item.propTypes = {
+  value: PropTypes.any, // string or integer basically
+  label: PropTypes.string
+};
 
 const styles = StyleSheet.create({
   picker: {
