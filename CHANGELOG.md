@@ -1,3 +1,6 @@
+# [0.2.2]() (2020-09-07)
+* 移除不必要的create-react-class库，修复[#7](https://github.com/yz1311/react-native-wheel-picker/issues/7)
+
 # [0.2.1]() (2020-08-28)
 * 修复DatePicker对年份和月份处理有误
 * DatePicker添加对错误参数的兼容处理 
