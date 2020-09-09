@@ -185,36 +185,44 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 大部分情况下Picker都不是只作为view使用，而是底部弹窗选择，下面是[react-native-modal](https://github.com/react-native-community/react-native-modal)为例的代码:
 
 ```javascript
-<Modal
-                style={{flex:1, justifyContent:'flex-end',margin: 0}}
-                isVisible={selectDateVisible}
-                onBackdropPress={()=>{
-                    setSelectDateVisible(false);
-                }}
-                onBackButtonPress={()=>{
-                    setSelectDateVisible(false);
-                }}
-                >
-                //所有的picker是默认显示header的
-                <DatePicker
-                    pickerTitle='预约时间'
-                    date={ruleForm.appointmentTime}
-                    mode={'datetime'}
-                    onPickerCancel={()=>{
-                        setSelectDateVisible(false);
-                    }}
-                    onPickerConfirm={date=>{
-                        setRuleForm(prevState => ({
-                            ...prevState,
-                            appointmentTime: date
-                        }));
-                        setSelectDateVisible(false);
-                    }}
-                    //大部分情况下不用关注date改变时的数据，下面方法可以删除
-                    onDateChange={()=>{}}
-                />
-            </Modal>
+    <Modal
+        style={{flex:1, justifyContent:'flex-end',margin: 0}}
+        isVisible={selectDateVisible}
+        onBackdropPress={()=>{
+            setSelectDateVisible(false);
+        }}
+        onBackButtonPress={()=>{
+            setSelectDateVisible(false);
+        }}
+        >
+        //所有的picker是默认显示header的
+        <DatePicker
+            pickerTitle='预约时间'
+            date={ruleForm.appointmentTime}
+            mode={'datetime'}
+            onPickerCancel={()=>{
+                setSelectDateVisible(false);
+            }}
+            onPickerConfirm={date=>{
+                setRuleForm(prevState => ({
+                    ...prevState,
+                    appointmentTime: date
+                }));
+                setSelectDateVisible(false);
+            }}
+            //大部分情况下不用关注date改变时的数据，下面方法可以删除
+            onDateChange={()=>{}}
+        />
+    </Modal>
 ```
+
+
+## 开发计划
+
++ [ ] CommonPicker支持传入对象数组而不是仅仅纯string/number数组
++ [ ] RegionPicker添加省市选择模式
++ [ ] 所有的Picker增加自带Modal模式,并支持ref的方式调用，减少代码量
+
 
 
 ## 截图(android/iOS)
