@@ -154,7 +154,10 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 ```
 <DateRangePicker
-
+        onPickerConfirm={(startDate, endDate)=>{
+            //注意: startDate和endDate是Date对象, 但是均可能为null
+            //如果有需求，必须同时选择开始结束时间的，可以通过判断这两个值是否为空来控制后续操作(譬如不让用户关闭Modal)
+        }
        />
 ```
 

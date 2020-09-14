@@ -24,15 +24,21 @@ import DatePicker from './DatePicker';
 import PickerHeader,{IProps as IPickerHeaderProps} from './PickerHeader';
 //import ToastUtils from '../utils/toastUtils';
 
-interface IProps extends IPickerHeaderProps {
+interface IProps extends Omit<IPickerHeaderProps, 'onPickerConfirm'> {
+    //验证选择的时间段是否合法，返回包含结果和信息的对象
     validate?: any,
+    //将加过返回到上一级,必须
     onNavigateBack?: any,
+    //数据发生变化
     onValueChange?: (startDate:Date, endDate:Date) => void,
+    onPickerConfirm?: (startDate:Date, endDate:Date) => void,
+    //是否只在startTime和endTime都选中的情况下才触发onValueChange
     onlyFinishTrigger?: boolean,
     pickerProps?: any,
     errorMessage?: string,
     startDate?: Date | string,
     endDate?: Date | string,
+    //在删除按钮左边显示错误信息，主要用于modal显示
     topErrorMessage?: boolean,
     startMinDate?: Date | string,
     startMaxDate?: Date | string,
@@ -45,27 +51,7 @@ const {width:deviceWidth} = Dimensions.get('window');
 
 export default class DateRangePicker extends PureComponent<IProps,any>{
 
-    static propTypes = {
-        //验证选择的时间段是否合法，返回包含结果和信息的对象
-        validate:PropTypes.func,
-        //将加过返回到上一级,必须
-        onNavigateBack:PropTypes.func,
-        //数据发生变化
-        onValueChange:PropTypes.func.isRequired,
-        //是否只在startTime和endTime都选中的情况下才触发onValueChange
-        onlyFinishTrigger:PropTypes.bool.isRequired,
-        pickerProps:PropTypes.object,
-        errorMessage:PropTypes.string,
-        startDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-        endDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-        //在删除按钮左边显示错误信息，主要用于modal显示
-        topErrorMessage:PropTypes.bool,
-        startMinDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-        startMaxDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-        endMinDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-        endMaxDate:PropTypes.oneOfType([PropTypes.instanceOf(Date),PropTypes.string]),
-    };
-
+ 
     static defaultProps = {
         showHeader: true,
         startMinDate:moment().add(-5,'year').toDate(),
@@ -99,12 +85,13 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
     render(){
         const {startMinDate,startMaxDate,endMinDate,endMaxDate} = this.props;
         return(
-            <View style={[{minHeight:340+(this.props.showHeader?40:0)},this.props.style]}>
+            <View style={[{backgroundColor: 'white', minHeight:340+(this.props.showHeader?40:0)},this.props.style]}>
                 {this.props.showHeader ?
                     <PickerHeader
                         {...this.props}
                         onPickerConfirm={()=>{
-                            this.props.onPickerConfirm&&this.props.onPickerConfirm(this.targetDate);
+                            let values = this._getValues();
+                            this.props.onPickerConfirm&&this.props.onPickerConfirm(values[0], values[1]);
                         }}
                     />
                     :
@@ -144,9 +131,17 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                                 maxDate={startMaxDate}
                                 date={this.state.startDate||new Date()}
                                 onDateChange={(date)=>{
-                                    this.setState({
-                                        startDate:date
-                                    },this.onValueChange);
+                                    if(this.state.endDate && moment(date).isAfter(moment(this.state.endDate))) {
+                                        this.setState({
+                                            startDate:date,
+                                            //开始日期比结束日期大,需要置空结束日期
+                                            endDate: ''
+                                        },this.onValueChange);
+                                    } else {
+                                        this.setState({
+                                            startDate:date
+                                        },this.onValueChange);
+                                    }
                                 }}
                                 {...this.props.pickerProps}
                             />
@@ -161,6 +156,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                                 maxDate={endMaxDate}
                                 date={this.state.endDate||new Date()}
                                 onDateChange={(date)=>{
+                                    //不可能出现选择结束日期能比开始日期大，因为限制了
                                     this.setState({
                                         endDate:date
                                     },this.onValueChange);
@@ -237,32 +233,38 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
         const {onValueChange,onlyFinishTrigger} = this.props;
         if(onValueChange)
         {
-            if(onlyFinishTrigger)
+            let values = this._getValues();
+            //如果结束日期大于开始时间，则置空结束时间(出现这种情况只可能是选择完结束日期后，又更改开始日期)
+            onValueChange(values[0], values[1]);
+        }
+    }
+
+    _getValues = ()=>{
+        const {onlyFinishTrigger} = this.props;
+        let toStartTime = '' as any, toEndTime = '' as any;
+        if(onlyFinishTrigger) {
+            if(isNull(this.state.startDate)||isNull(this.state.endDate))
             {
-                if(isNull(this.state.startDate)||isNull(this.state.endDate))
-                {
-                    //说明当前的数据是不全的
-                    onValueChange('','');
-                }
-                else {
-                    onValueChange(moment(this.state.startDate),
-                        moment(this.state.endDate)
-                    );
-                }
+                //说明当前的数据是不全的
+                toStartTime = '';
+                toEndTime = '';
             }
-            else
+            else {
+                toStartTime = moment(this.state.startDate);
+                toEndTime = moment(this.state.endDate);
+            }
+        } else {
+            if(isNull(this.state.startDate)&&isNull(this.state.endDate))
             {
-                if(isNull(this.state.startDate)&&isNull(this.state.endDate))
-                {
-                    onValueChange('','');
-                }
-                else{
-                    const toStartTime = isNull(this.state.startDate)?'':moment(this.state.startDate);
-                    const toEndTime = isNull(this.state.endDate)?'':moment(this.state.endDate);
-                    onValueChange(toStartTime,toEndTime);
-                }
+                toStartTime = '';
+                toEndTime = '';
+            }
+            else{
+                toStartTime = isNull(this.state.startDate)?'':moment(this.state.startDate);
+                toEndTime = isNull(this.state.endDate)?'':moment(this.state.endDate);
             }
         }
+        return [toStartTime?toStartTime.toDate():null, toEndTime?toEndTime.toDate():null];
     }
 
     showInfo = (text) => {

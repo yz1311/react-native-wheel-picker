@@ -92,7 +92,7 @@ declare module '@yz1311/react-native-wheel-picker' {
 
     }
 
-    interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'> {
+    interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'|'pickerData'|'selectedValue'> {
       //年月日单位，默认为：年 月 日 时 分 秒
       labelUnit?: {
         year?: string,
@@ -123,10 +123,11 @@ declare module '@yz1311/react-native-wheel-picker' {
 
     }
 
-    interface IDateRangePickerProps extends IPickerHeaderProps {
+    interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'> {
       validate?: any,
       onNavigateBack?: any,
       onValueChange?: (startDate:Date, endDate:Date) => void,
+      onPickerConfirm?: (startDate:Date, endDate:Date) => void,
       onlyFinishTrigger?: boolean,
       pickerProps?: any,
       errorMessage?: string,
