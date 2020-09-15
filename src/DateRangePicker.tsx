@@ -35,11 +35,10 @@ interface IProps extends Omit<IPickerHeaderProps, 'onPickerConfirm'> {
     //是否只在startTime和endTime都选中的情况下才触发onValueChange
     onlyFinishTrigger?: boolean,
     pickerProps?: any,
+    //在删除按钮左边显示错误信息，主要用于modal显示
     errorMessage?: string,
     startDate?: Date | string,
     endDate?: Date | string,
-    //在删除按钮左边显示错误信息，主要用于modal显示
-    topErrorMessage?: boolean,
     startMinDate?: Date | string,
     startMaxDate?: Date | string,
     endMinDate?: Date | string,
@@ -54,9 +53,9 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
  
     static defaultProps = {
         showHeader: true,
-        startMinDate:moment().add(-5,'year').toDate(),
-        startMaxDate:moment().add(1,'year').toDate(),
-        endMaxDate:moment().add(1,'year').toDate(),
+        startMinDate: moment().add(-30,'year').toDate(),
+        startMaxDate: moment().add(10,'year').toDate(),
+        endMaxDate: moment().add(10,'year').toDate(),
         onlyFinishTrigger:true
     };
 
@@ -68,8 +67,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
             //0表示都没选中，1表示开始时间选中，2表示结束时间选中
             activeIndex:1,
             //都是索引号为0，代表值'0'
-            startDate:props.startDate||null,
-            endDate:props.endDate||null,
+            startDate: props.startDate||new Date(),
+            endDate: props.endDate||null,
             selectedYear2:'',
             selectedMonth2:'',
             status:true
@@ -103,7 +102,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                     <TimeBaseView style={{flex:1}} index={2} activeIndex={this.state.activeIndex} onPress={this.timeClick} date={this.state.endDate}/>
                 </View>
                 <View style={{height:40,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-                    {this.props.topErrorMessage?
+                    {this.props.errorMessage?
                         <Text style={{alignSelf:'center',color:'#ff4141',fontSize:14,marginLeft:10}}>{this.props.errorMessage}</Text>
                         :
                         <View />
@@ -179,8 +178,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
             //清空
             case 0:
                 this.setState({
-                    activeIndex:0,
-                    startDate:null,
+                    activeIndex: 1,
+                    startDate: new Date(),
                     endDate:null
                 },()=>this.onValueChange());
                 break;
@@ -189,7 +188,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                 if(!this.state.startDate)
                     this.setState({
                         activeIndex:1,
-                        startDate:this.props.startDate||moment().add(-1,'days').toDate(),
+                        startDate:this.props.startDate||moment().toDate(),
                     },()=>this.onValueChange());
                 else
                 {
@@ -200,7 +199,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                 break;
             //结束时间
             case 2:
-                if(this.state.activeIndex === 0)
+                //必须先选择开始时间
+                if(this.state.activeIndex === 0 || this.state.activeIndex === 1&&!this.state.startDate)
                 {
                     //ToastUtils.showToast('请先选择开始日期');
                     return;
@@ -210,7 +210,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                 {
                     this.setState({
                         activeIndex:2,
-                        endDate:this.props.endDate||null
+                        endDate: this.state.startDate||null
                     },()=>this.onValueChange());
                 }
                 else

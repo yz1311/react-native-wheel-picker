@@ -125,18 +125,28 @@ declare module '@yz1311/react-native-wheel-picker' {
 
     interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'> {
       validate?: any,
+      //暂无用处
       onNavigateBack?: any,
+      //值发生变化回调函数
       onValueChange?: (startDate:Date, endDate:Date) => void,
+      //点击pickerHeader右侧的确认按钮回调函数
       onPickerConfirm?: (startDate:Date, endDate:Date) => void,
+      //暂无用处
       onlyFinishTrigger?: boolean,
       pickerProps?: any,
+      //删除按钮的左侧，用于显示错误信息(红色), errorMessage不为空的时候就显示
       errorMessage?: string,
+      //默认开始时间
       startDate?: Date | string,
+      //默认结束时间
       endDate?: Date | string,
-      topErrorMessage?: boolean,
+      //开始时间的最小时间
       startMinDate?: Date | string,
+      //开始时间的最大时间
       startMaxDate?: Date | string,
+      //结束时间的最小时间(如果开始时间不为空，则会被选择的开始时间覆盖)
       endMinDate?: Date | string,
+      //结束时间的最大时间
       endMaxDate?: Date | string,
       style?: any
     }

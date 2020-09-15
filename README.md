@@ -144,6 +144,10 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
         mode={'date'}
         //date值可以不填，默认是当前时间
         date={new Date()}
+        onPickerConfirm={(value)=>{
+            //不管mode的值是哪一种, value均是一个Date对象, 需要转换为所需的值
+            //譬如: 如果mode=='year', 则可以通过`moment(value).year()`
+        }}
         />
 ```
 ![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6pgdtf5aj30bx08474n.jpg)
@@ -152,8 +156,28 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 * ### 日期段选择
 
-```
+该库是仿照支付宝账单的时间段选择控件来的(支付宝: 我的-账单)
+
+
+#### 规则介绍(跟支付宝的并非完全一样):
+
+* 开始时间的选择范围: 当前时间的 前30年~后10年(跟DatePicker的范围一致)
+
+* 结束时间的范围范围: 选择的开始时间~当前时间的后10年，也就是必须先选择开始时间才能选择结束时间
+
+* 清空按钮，会设置开始时间为当前时间，结束时间为空
+
+* 如果已选择开始结束时间，再将开始时间选择为大于结束时间，则会清空结束时间
+
+* 通过startDate和endDate两个属性可以设置默认值(只能设置默认值，无法从外部更新值)
+
+* 默认只有同时选择了开始结束时间才会返回值，其中有任意一个没选择，返回的startDate和endDate都是null 
+
+
+```Javascript
 <DateRangePicker
+        //错误信息(可选)
+        errorMessage={this.state.errorMessage}
         onPickerConfirm={(startDate, endDate)=>{
             //注意: startDate和endDate是Date对象, 但是均可能为null
             //如果有需求，必须同时选择开始结束时间的，可以通过判断这两个值是否为空来控制后续操作(譬如不让用户关闭Modal)
