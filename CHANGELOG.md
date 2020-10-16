@@ -1,3 +1,7 @@
+# [0.2.4]() (2020-10-16)
+* `PickerHeader`组件(所有Picker公用的头部组件)支持`取消`和`确定`按钮的自定义样式
+* 完善index.d.ts文件
+
 # [0.2.3]() (2020-09-15)
 * 修复并完善`DateRangePicker`组件及文档,修复[#9](https://github.com/yz1311/react-native-wheel-picker/issues/9)
 

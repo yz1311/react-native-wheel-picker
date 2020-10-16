@@ -7,9 +7,11 @@ export interface IProps {
     pickerTitle?: string,
     pickerTitleStyle?: StyleProp<TextStyle>,
     pickerCancelBtnText?: string,
-    pickerCancelBtnStyle?: StyleProp<TextStyle>,
+    pickerCancelBtnStyle?: StyleProp<ViewStyle>,
+    pickerCancelBtnTextStyle?: StyleProp<TextStyle>,
     pickerConfirmBtnText?: string,
-    pickerConfirmBtnStyle?: StyleProp<TextStyle>,
+    pickerConfirmBtnStyle?: StyleProp<ViewStyle>,
+    pickerConfirmBtnTextStyle?: StyleProp<TextStyle>,
     onPickerCancel?: (value?:any)=>void,
     onPickerConfirm?: (value:any)=>void
 }
@@ -18,7 +20,9 @@ const PickerHeader: FC<IProps> = ({pickerTitle,pickerCancelBtnText,
                                         pickerTitleStyle,
                                         pickerToolBarStyle,
                                         pickerCancelBtnStyle,
+                                        pickerCancelBtnTextStyle,
                                         pickerConfirmBtnStyle,
+                                        pickerConfirmBtnTextStyle,
                                         pickerConfirmBtnText,onPickerCancel,onPickerConfirm})=>{
     return (
         <View style={[{flexDirection:'row',justifyContent:'space-between',height:40,
@@ -30,7 +34,7 @@ const PickerHeader: FC<IProps> = ({pickerTitle,pickerCancelBtnText,
                     onPickerCancel&&onPickerCancel();
                 }}
             >
-                <Text style={{color:'#666666',fontSize:16}}>{pickerCancelBtnText}</Text>
+                <Text style={[{color:'#666666',fontSize:16}, pickerCancelBtnTextStyle]}>{pickerCancelBtnText}</Text>
             </TouchableOpacity>
             <Text style={[{alignSelf:'center',color:'#000000',fontSize:16},pickerTitleStyle]}>{pickerTitle}</Text>
             <TouchableOpacity
@@ -40,7 +44,7 @@ const PickerHeader: FC<IProps> = ({pickerTitle,pickerCancelBtnText,
                     onPickerConfirm&&onPickerConfirm(null);
                 }}
             >
-                <Text style={{color:'#149be0',fontSize:16}}>{pickerConfirmBtnText}</Text>
+                <Text style={[{color:'#149be0',fontSize:16}, pickerConfirmBtnTextStyle]}>{pickerConfirmBtnText}</Text>
             </TouchableOpacity>
         </View>
     );
