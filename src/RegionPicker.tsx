@@ -11,6 +11,7 @@ import pca from './resource/pca-code.json';
 export interface IProps extends ICommonPickerProps{
     //传递自定义的json文件
     data?:any,
+    mode: 'p' | 'pc' | 'pca',
     onPickerConfirm:(names:Array<string>,codes:Array<string>)=>void,
 }
 
@@ -22,7 +23,8 @@ export default class RegionPicker extends PureComponent<IProps,IState>{
 
     static defaultProps = {
         //不需要props中的pickerData了
-        pickerData: null
+        pickerData: null,
+        mode: 'pca'
     };
 
     readonly state:IState = {
@@ -37,13 +39,28 @@ export default class RegionPicker extends PureComponent<IProps,IState>{
         let pickerData:any = {};
         //支持外部源
         let source = this.props.data || pca;
-        for (let province of source) {
-            pickerData[province.name] = {};
-            if(province.children&&province.children.length>0) {
-                for (let city of province.children) {
-                    pickerData[province.name][city.name] = (city.children || []).map(x=>x.name);
-                }
+        switch (this.props.mode) {
+          case "p":
+            pickerData = [];
+            for (let province of source) {
+              pickerData.push(province.name);
             }
+            break;
+          case "pc":
+            for (let province of source) {
+              pickerData[province.name] = (province.children||[]).map(x=>x.name);
+            }
+            break;
+          case "pca":
+            for (let province of source) {
+              pickerData[province.name] = {};
+              if(province.children&&province.children.length>0) {
+                for (let city of province.children) {
+                  pickerData[province.name][city.name] = (city.children || []).map(x=>x.name);
+                }
+              }
+            }
+            break;
         }
         this.setState({
             pickerData: pickerData
@@ -58,12 +75,25 @@ export default class RegionPicker extends PureComponent<IProps,IState>{
             let province,city,area;
             province = source.find(x=>x.name==value[0]);
             if(province) {
+              if(value[1]!=undefined) {
                 city = (province.children || []).find(x=>x.name==value[1]);
-                if(city) {
-                    area = (city.children || []).find(x=>x.name==value[2]);
-                }
+              }
+              if(city&&value[2]!=undefined) {
+                area = (city.children || []).find(x=>x.name==value[2]);
+              }
             }
-            codes = [province?.code,city?.code,area?.code];
+            switch (this.props.mode) {
+              case "p":
+                codes = [province?.code];
+                break;
+              case "pc":
+                codes = [province?.code,city?.code];
+                break;
+              case "pca":
+                codes = [province?.code,city?.code,area?.code];
+                break;
+
+            }
         }
 
         this.props.onPickerConfirm&&this.props.onPickerConfirm(value, codes);

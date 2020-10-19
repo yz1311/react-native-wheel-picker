@@ -195,12 +195,13 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 如果需要二级、四级、五级等其它联动模式，可以直接按照[RegionPicker](https://github.com/yz1311/react-native-wheel-picker/blob/master/src/RegionPicker.tsx)改写一下就行了(或者提issues我加上)
 
-
-```
+```javascript
 <RegionPicker
+        //模式，'p' | 'pc' | 'pca'三个值分别代表省、省市、省市区 三种模式,默认是pca
+        mode="pca"
         onPickerConfirm={(names, codes)=>{
-            //names: ["上海市", "市辖区", "黄浦区"]
-            //codes: ["31", "3101", "310101"]
+            //names: ["上海市", "市辖区", "黄浦区"],根据mode的不同返回不同长度的数组
+            //codes: ["31", "3101", "310101"],根据mode的不同返回不同长度的数组
         }}
         selectedValue={['']} />
 ```
@@ -247,7 +248,7 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 ## 开发计划
 
 + [ ] CommonPicker支持传入对象数组而不是仅仅纯string/number数组
-+ [ ] RegionPicker添加省市选择模式
++ [x] ~~RegionPicker添加省市选择模式~~
 + [ ] 所有的Picker增加自带Modal模式,并支持ref的方式调用，减少代码量
 
 

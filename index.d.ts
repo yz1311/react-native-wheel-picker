@@ -139,7 +139,18 @@ declare module '@yz1311/react-native-wheel-picker' {
     }
     
     interface IRegionPickerProps extends Omit<ICommonPickerProps,'onPickerConfirm'|'pickerData'> {
+      /**
+       * 传递自定义的json文件,默认使用内置的数据源
+       */
       data?:any,
+      /**
+       * 模式，下面三个值分别代表省、省市、省市区 三种模式,默认是pca
+       */
+      mode?: 'p' | 'pc' | 'pca',
+      /**
+       * names: 名称，譬如["湖北省", "武汉市", "洪山区"],根据mode的不同返回不同长度的数组
+       * codes: 编号，譬如["42", "4201", "420111"],根据mode的不同返回不同长度的数组
+       */
       onPickerConfirm:(names:Array<string>,codes:Array<string>)=>void,
     }
 
