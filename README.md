@@ -193,7 +193,7 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 项目里面已经自带该数据源，也可以用`data={require('pca-code.json')}`的方式自定义数据源，但必须符合格式
 
-如果需要二级、四级、五级等其它联动模式，可以直接按照[RegionPicker](https://github.com/yz1311/react-native-wheel-picker/blob/master/src/RegionPicker.tsx)改写一下就行了(或者提issues我加上)
+如果需要四级、五级等其它联动模式，可以直接按照[RegionPicker](https://github.com/yz1311/react-native-wheel-picker/blob/master/src/RegionPicker.tsx)改写一下就行了(数据量过大，不宜内置进库)
 
 ```javascript
 <RegionPicker
