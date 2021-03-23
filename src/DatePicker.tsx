@@ -327,9 +327,9 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     }
 
     render () {
-        const {mode, labelUnit} = this.props;
+        const {mode, labelUnit, isModal, modalProps, modalVisible, onModalVisibleChange} = this.props;
         const { width: deviceWidth } = Dimensions.get('window');
-        return (
+        const pickerView = (
             <View style={[{minHeight:240+(this.props.showHeader?40:0)},this.props.style]}>
                 {this.props.showHeader ?
                     <PickerHeader
@@ -359,5 +359,26 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                 }
             </View>
         );
+        if(isModal) {
+            const Modal = require('react-native-modal').default;
+            if(Modal) {
+                return (
+                    <Modal
+                        onBackdropPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        onBackButtonPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        {...(modalProps||{})}
+                        style={[{flex:1, justifyContent:'flex-end',margin: 0}, (modalProps||{style: undefined}).style]}
+                        isVisible={modalVisible}
+                    >
+                        {pickerView}
+                    </Modal>
+                );
+            }
+        }
+        return pickerView;
     }
 }

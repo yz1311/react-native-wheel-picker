@@ -60,7 +60,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
 
     render(){
         const {startMinDate,startMaxDate,endMinDate,endMaxDate} = this.props;
-        return(
+        const {isModal, modalProps, modalVisible, onModalVisibleChange} = this.props;
+        const pickerView = (
             <View style={[{backgroundColor: 'white', minHeight:340+(this.props.showHeader?40:0)},this.props.style]}>
                 {this.props.showHeader ?
                     <PickerHeader
@@ -143,6 +144,27 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                 </View>
             </View>
         );
+        if(isModal) {
+            const Modal = require('react-native-modal').default;
+            if(Modal) {
+                return (
+                    <Modal
+                        onBackdropPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        onBackButtonPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        {...(modalProps||{})}
+                        style={[{flex:1, justifyContent:'flex-end',margin: 0}, (modalProps||{style: undefined}).style]}
+                        isVisible={modalVisible}
+                    >
+                        {pickerView}
+                    </Modal>
+                );
+            }
+        }
+        return pickerView;
     }
 
     timeClick=(index)=>{

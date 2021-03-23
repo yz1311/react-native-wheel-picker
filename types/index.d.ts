@@ -110,8 +110,25 @@ export class PickerHeader extends React.Component<IPickerHeaderProps,any> {
 
 }
 
+/**
+ * modal模式相关的属性
+ */
+interface IPickerModalProps {
+    /**
+     * 是否为底部弹窗模式，默认为false
+     * 使用 https://github.com/react-native-community/react-native-modal 作为弹窗
+     */
+    isModal?: boolean;
+    modalVisible?: boolean;
+    onModalVisibleChange?: (visible: boolean)=>void;
+    /**
+     * modal组件的属性
+     */
+    modalProps?: Partial<Omit<ModalProps, 'children'|'isVisible'>>;
+}
 
-export interface ICommonPickerProps extends IPickerHeaderProps {
+
+export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProps {
     style?: StyleProp<ViewStyle>;
     /**
      * 默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
@@ -132,17 +149,6 @@ export interface ICommonPickerProps extends IPickerHeaderProps {
     selectedValue: string | number | Array<string | number>;
     onPickerCancel?: (value:any) => void;
     onValueChange?: (value:any,wheelIndex:number) => void;
-    /**
-     * 是否为底部弹窗模式，默认为false
-     * 使用 https://github.com/react-native-community/react-native-modal 作为弹窗
-     */
-    isModal?: boolean;
-    modalVisible?: boolean;
-    onModalVisibleChange?: (visible: boolean)=>void;
-    /**
-     * modal组件的属性
-     */
-    modalProps?: Omit<ModalProps, 'children'|'isVisible'>;
 }
 
 export class CommonPicker extends React.Component<ICommonPickerProps,any> {
@@ -169,7 +175,7 @@ export class RegionPicker extends React.Component<IRegionPickerProps,any>{
 
 }
 
-export interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'|'pickerData'|'selectedValue'> {
+export interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'|'pickerData'|'selectedValue'>, IPickerModalProps {
     //年月日单位，默认为：年 月 日 时 分 秒
     labelUnit?: {
         year?: string,
@@ -210,7 +216,7 @@ export class DatePicker extends React.Component<IDatePickerProps,any> {
 
 }
 
-export interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'> {
+export interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'>, IPickerModalProps {
     /**
      * 验证选择的时间段是否合法，返回包含结果和信息的对象
      */
