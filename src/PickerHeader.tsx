@@ -1,20 +1,7 @@
 import React, {FC} from "react";
 import {StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle} from "react-native";
+import {IPickerHeaderProps as IProps} from '../types';
 
-
-export interface IProps {
-    pickerToolBarStyle?: StyleProp<ViewStyle>,
-    pickerTitle?: string,
-    pickerTitleStyle?: StyleProp<TextStyle>,
-    pickerCancelBtnText?: string,
-    pickerCancelBtnStyle?: StyleProp<ViewStyle>,
-    pickerCancelBtnTextStyle?: StyleProp<TextStyle>,
-    pickerConfirmBtnText?: string,
-    pickerConfirmBtnStyle?: StyleProp<ViewStyle>,
-    pickerConfirmBtnTextStyle?: StyleProp<TextStyle>,
-    onPickerCancel?: (value?:any)=>void,
-    onPickerConfirm?: (value:any)=>void
-}
 
 const PickerHeader: FC<IProps> = ({pickerTitle,pickerCancelBtnText,
                                         pickerTitleStyle,

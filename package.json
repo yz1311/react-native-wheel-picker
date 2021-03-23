@@ -1,8 +1,9 @@
 {
   "name": "@yz1311/react-native-wheel-picker",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "React native cross platform picker.",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,9 +17,9 @@
   "keywords": [
     "react-native",
     "picker",
-	  "wheel"
+    "wheel"
   ],
-  "author": "Yu Zheng",
+  "author": "yz1311",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/yz1311/react-native-wheel-picker/issues"
@@ -27,11 +28,16 @@
   "dependencies": {
     "prop-types": "^15.5.10"
   },
-  "devDependencies": {  
-    "typescript": "^3.5.2"
+  "devDependencies": {
+    "@types/react": "17.0.3",
+    "@types/react-native": "0.64.0",
+    "moment": "^2.29.1",
+    "typescript": "^3.5.2",
+    "react-native-modal": "^11.7.0"
   },
   "peerDependencies": {
+    "moment": "*",
     "react-native": "^0.51.2",
-    "moment": "*"
+    "react-native-modal": "^11.7.0"
   }
 }

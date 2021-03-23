@@ -3,17 +3,10 @@
  */
 
 import React, {forwardRef, PureComponent} from "react";
-import CommonPicker,{IProps as ICommonPickerProps} from "./CommonPicker";
-import {View} from "react-native";
+import CommonPicker from "./CommonPicker";
 import pca from './resource/pca-code.json';
+import {IRegionPickerProps as IProps} from '../types';
 
-//@ts-ignore
-export interface IProps extends ICommonPickerProps{
-    //传递自定义的json文件
-    data?:any,
-    mode: 'p' | 'pc' | 'pca',
-    onPickerConfirm:(names:Array<string>,codes:Array<string>)=>void,
-}
 
 export interface IState {
     pickerData: any,

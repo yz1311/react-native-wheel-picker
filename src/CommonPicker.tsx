@@ -14,27 +14,15 @@ import {
     PickerIOS,
     ViewPropTypes, StyleProp, ViewStyle, TextStyle,
 } from 'react-native';
-import PropTypes from 'prop-types';
+//@ts-ignore
 import WheelCurvedPicker from '../WheelCurvedPicker';
+import PickerHeader from './PickerHeader';
+import {ICommonPickerProps as IProps} from '../types';
+import {isIPhoneX} from './utils';
 
 const Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
 let PickerItem = Picker.Item;
-let {width, height} = Dimensions.get('window');
-import PickerHeader ,{IProps as IPickerHeaderProps} from './PickerHeader';
 
-
-export interface IProps extends IPickerHeaderProps{
-    style?: StyleProp<ViewStyle>,
-    //默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
-    showHeader?: boolean,
-    pickerWrapperStyle?: StyleProp<ViewStyle>,
-    pickerElevation?: number,
-    pickerData: any,
-    //已选择的值
-    selectedValue: string | number | Array<string | number>,
-    onPickerCancel?: (value:any) => void,
-    onValueChange?: (value:any,wheelIndex:number) => void,
-}
 
 export interface IState {
     style?: any,
@@ -54,7 +42,6 @@ export interface IState {
 
 export default class CommonPicker extends Component<IProps,IState> {
 
-
     static defaultProps = {
         showHeader: true,
         pickerConfirmBtnText: '确定',
@@ -64,7 +51,7 @@ export default class CommonPicker extends Component<IProps,IState> {
 
     private pickerStyle: 'parallel' | 'cascade';
     private pickedValue: any;
-    private wheelRefs:Array<Picker> = [];
+    private wheelRefs:Array<any> = [];
     private wheelSelectedIndexes: Array<number>;
 
     constructor(props, context){
@@ -130,7 +117,7 @@ export default class CommonPicker extends Component<IProps,IState> {
             if(!pickerData.some(x => Array.isArray(x))) {
                 //全部不是数组
                 //说明是['1','2','3']这种单列数据
-                
+
                 //设置默认选中值必须要在pickerData重新赋值之前
                 //默认取第一个元素
                 let index = 0
@@ -169,9 +156,8 @@ export default class CommonPicker extends Component<IProps,IState> {
             }
 
             this.wheelSelectedIndexes = wheelSelectedIndexes;
-            console.log(wheelSelectedIndexes)
-        }
-        else if (pickerStyle === 'cascade') {
+            //console.log(wheelSelectedIndexes)
+        } else if (pickerStyle === 'cascade') {
             //找出级别
             let maxDeepLength = this._getDeepLength(pickerData, 0);
             wheelSelectedIndexes = Array.from({ length: maxDeepLength });
@@ -179,7 +165,7 @@ export default class CommonPicker extends Component<IProps,IState> {
         }
         //save picked data
         this.pickedValue = JSON.parse(JSON.stringify(selectedValue));
-        this.pickerStyle = pickerStyle;
+        this.pickerStyle = pickerStyle as 'parallel' | 'cascade';
         let result = Object.assign(Object.assign({}, props), { pickerData,
             selectedValue, wheelDatas: cascadeData.wheelDatas, wheelSelectedIndexes: wheelSelectedIndexes });
         return result;
@@ -395,7 +381,8 @@ export default class CommonPicker extends Component<IProps,IState> {
     }
 
     render(){
-        return (
+        const {isModal, modalProps, modalVisible, onModalVisibleChange} = this.props;
+        const pickerView = (
             <View style={[styles.pickerBox,{minHeight:240+(this.props.showHeader?40:0)}, this.props.style]}>
                 {this.props.showHeader ?
                     <PickerHeader
@@ -409,8 +396,30 @@ export default class CommonPicker extends Component<IProps,IState> {
                 <View style={[styles.pickerWrap,this.props.pickerWrapperStyle]}>
                     {this._renderWheel(this.state.pickerData)}
                 </View>
+                {isModal&&isIPhoneX?<View style={{height: 34}}/> : null}
             </View>
         );
+        if(isModal) {
+            const Modal = require('react-native-modal').default;
+            if(Modal) {
+                return (
+                    <Modal
+                        onBackdropPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        onBackButtonPress={()=>{
+                            onModalVisibleChange&&onModalVisibleChange(false);
+                        }}
+                        {...(modalProps||{})}
+                        style={[{flex:1, justifyContent:'flex-end',margin: 0}, (modalProps||{style: undefined}).style]}
+                        isVisible={modalVisible}
+                    >
+                        {pickerView}
+                    </Modal>
+                );
+            }
+        }
+        return pickerView;
     }
 }
 

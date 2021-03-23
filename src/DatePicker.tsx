@@ -12,31 +12,11 @@ import {
     Dimensions,
     Text
 } from "react-native";
-import PropTypes from "prop-types";
 import moment from "moment";
-import CommonPicker, {IProps as ICommonPickerProps} from "./CommonPicker";
-import PickerHeader,{IProps as IPickerHeaderProps} from './PickerHeader';
+import CommonPicker from "./CommonPicker";
+import PickerHeader from './PickerHeader';
+import {IDatePickerProps as IProps} from '../types';
 
-
-export interface IProps extends IPickerHeaderProps {
-    labelUnit?: {
-        year?: string,
-        month?: string,
-        date?: string,
-        hour?: string,
-        minute?: string,
-        second?: string,
-    },
-    //非必填，默认为当前时间
-    date?: Date,
-    minDate?: Date,
-    maxDate?: Date,
-    mode?: 'year' | 'month' | 'date' | 'time' | 'datetime',
-    onDateChange?: Function,
-    style?: StyleProp<ViewStyle>,
-    showHeader?: boolean,
-    pickerWrapperStyle?: StyleProp<ViewStyle>,
-}
 
 export interface IState {
     pickerData?: Array<any>,
@@ -157,7 +137,6 @@ export default class DatePicker extends PureComponent<IProps,IState>{
                 return this._genTimeData(props);
             case 'datetime':
                 return [Array.from(years), Array.from(monthes), Array.from(days), ...this._genTimeData(props)];
-                break;
             default:
                 return [];
         }
@@ -381,14 +360,4 @@ export default class DatePicker extends PureComponent<IProps,IState>{
             </View>
         );
     }
-}
-
-export interface IDatePickerViewProps {
-    style?:StyleProp<ViewStyle>,
-    pickerWrapperStyle?:StyleProp<ViewStyle>,
-    pickerData: any,
-    selectedValue: any,
-    labelUnit: any,
-    onDateChange: any,
-    mode: any
 }

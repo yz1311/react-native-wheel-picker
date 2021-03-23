@@ -9,8 +9,6 @@ import React, {Component,PureComponent} from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
-    Animated,
-    AppState,
     Text,
     View,
     Image,
@@ -18,39 +16,18 @@ import {
     Switch,
     PixelRatio, Dimensions
 } from 'react-native';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import DatePicker from './DatePicker';
-import PickerHeader,{IProps as IPickerHeaderProps} from './PickerHeader';
+import PickerHeader from './PickerHeader';
+import {IDateRangePickerProps as IProps} from '../types';
 //import ToastUtils from '../utils/toastUtils';
 
-interface IProps extends Omit<IPickerHeaderProps, 'onPickerConfirm'> {
-    //验证选择的时间段是否合法，返回包含结果和信息的对象
-    validate?: any,
-    //将加过返回到上一级,必须
-    onNavigateBack?: any,
-    //数据发生变化
-    onValueChange?: (startDate:Date, endDate:Date) => void,
-    onPickerConfirm?: (startDate:Date, endDate:Date) => void,
-    //是否只在startTime和endTime都选中的情况下才触发onValueChange
-    onlyFinishTrigger?: boolean,
-    pickerProps?: any,
-    //在删除按钮左边显示错误信息，主要用于modal显示
-    errorMessage?: string,
-    startDate?: Date | string,
-    endDate?: Date | string,
-    startMinDate?: Date | string,
-    startMaxDate?: Date | string,
-    endMinDate?: Date | string,
-    endMaxDate?: Date | string,
-    style?: any
-}
 
 const {width:deviceWidth} = Dimensions.get('window');
 
 export default class DateRangePicker extends PureComponent<IProps,any>{
 
- 
+
     static defaultProps = {
         showHeader: true,
         startMinDate: moment().add(-30,'year').toDate(),
