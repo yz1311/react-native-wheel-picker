@@ -8,7 +8,7 @@
 
 > android端基于[WheelPicker](https://github.com/AigeStudio/WheelPicker) 1.1.2版本(注意不要手动升级到1.1.3)进行封装
 
-> ios端基于RN自带的PickerIOS进行封装
+> ios端基于RN自带的PickerIOS进行封装(从0.3.0已将PickerIOS的代码放在项目中)
 
 在原库的基础上面，进行了下面的修改:
 
@@ -29,11 +29,15 @@ npm i @yz1311/react-native-wheel-picker  moment react-native-modal --save
 
 ## 自动集成
 
-RN>=0.60,由于auto linking，无需操作
+RN>=0.60
+```shell
+cd ios
+pod install
+```
 
 RN<0.60
 
-```
+```shell
 react-native link @yz1311/react-native-wheel-picker
 ```
 
@@ -257,6 +261,7 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
             
         }}
         modalVisible={selectDateVisible}
+        //modalVisible回调函数
         onModalVisibleChange={visible => {
             setSelectDateVisible(visible);
         }}
@@ -278,7 +283,7 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 ## 开发计划
 
 + [ ] CommonPicker支持传入对象数组而不是仅仅纯string/number数组
-+ [x] ~~RegionPicker添加省市选择模式~~
++ [x] RegionPicker添加省市选择模式
 + [x] 所有的Picker增加自带Modal模式，减少代码量
 
 
@@ -287,16 +292,19 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
 
 ### datePicker
 
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6o9nw0lxj30u01uo762.jpg)
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6o9xu78pj30c00lx3za.jpg)
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6o9nw0lxj30u01uo762.jpg" />
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6o9xu78pj30c00lx3za.jpg" />
 
 
 ### dateRangePicker
 
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6ob3ycfcj30u01uomzf.jpg)
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obajcubj30c00lxaau.jpg)
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6ob3ycfcj30u01uomzf.jpg" />
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obajcubj30c00lxaau.jpg" />
+
 
 ### regionPicker
 
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obnr8ykj30u01uowgk.jpg)
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obrmhndj30c00lxaaq.jpg)
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obnr8ykj30u01uowgk.jpg" />
+<img style="width: 300px;" src="https://tva1.sinaimg.cn/large/006tNbRwgy1ga6obrmhndj30c00lxaaq.jpg" />
+
+

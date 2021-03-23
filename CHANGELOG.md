@@ -1,3 +1,14 @@
+# [0.3.0]() (2021-03-23)
+##Breaking Changes
+* 因为PickerIOS组件即将在新版的react-native中移除掉，而`@react-native-picker/picker`库中只需要PickerIOS组件，
+  将`@react-native-picker/picker`中ios部分的代码放在项目中 (解决 [#16](https://github.com/yz1311/react-native-wheel-picker/issues/16) [#18](https://github.com/yz1311/react-native-wheel-picker/issues/18))
+  
+从0.3.0版本开始，安装库之后，需要在`ios`文件夹执行
+```
+pod install
+```
+
+
 # [0.2.7]() (2021-03-23)
 * 支持弹窗模式(注意: 需要安装`react-native-modal`库)
 * 统一定义文件,修复部分ts定义

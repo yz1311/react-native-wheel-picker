@@ -1,6 +1,6 @@
 {
   "name": "@yz1311/react-native-wheel-picker",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "React native cross platform picker.",
   "main": "index.js",
   "types": "types/index.d.ts",
@@ -29,15 +29,23 @@
     "prop-types": "^15.5.10"
   },
   "devDependencies": {
-    "@types/react": "17.0.3",
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@types/react": "17.0.2",
     "@types/react-native": "0.64.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.7.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-native": "^0.64.0",
+    "flow-bin": "0.140.0",
     "typescript": "^3.5.2",
     "react-native-modal": "^11.7.0"
   },
   "peerDependencies": {
     "moment": "*",
-    "react-native": "^0.51.2",
+    "react-native": "^0.63.4",
     "react-native-modal": "^11.7.0"
   }
 }
