@@ -257,6 +257,9 @@ import WheelPicker ,{CommonPicker,DateRangePicker,DatePicker,RegionPicker} from 
             
         }}
         modalVisible={selectDateVisible}
+        onModalVisibleChange={visible => {
+            setSelectDateVisible(visible);
+        }}
         onPickerCancel={()=>{
             setSelectDateVisible(false);
         }}
