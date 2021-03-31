@@ -1,3 +1,6 @@
+# [0.3.1]() (2021-03-30)
+* 兼容iphone12 max和mini
+
 # [0.3.0]() (2021-03-23)
 ##Breaking Changes
 * 因为PickerIOS组件即将在新版的react-native中移除掉，而`@react-native-picker/picker`库中只需要PickerIOS组件，
