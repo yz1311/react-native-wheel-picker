@@ -11,6 +11,10 @@ const PAD_WIDTH = 768;
 const PAD_HEIGHT = 1024;
 const IPHONE12_WIDTH = 390;
 const IPHONE12_HEIGHT = 844;
+const IPHONE12MAX_WIDTH = 428;
+const IPHONE12MAX_HEIGHT = 926;
+const IPHONE12MINI_WIDTH = 360;
+const IPHONE12MINI_HEIGHT = 780;
 
 const {width: D_WIDTH, height: D_HEIGHT} = Dimensions.get('window');
 
@@ -24,7 +28,11 @@ const isIPhoneX = (() => {
         ((D_HEIGHT === XSMAX_HEIGHT && D_WIDTH === XSMAX_WIDTH) ||
             (D_HEIGHT === XSMAX_WIDTH && D_WIDTH === XSMAX_HEIGHT)) ||
         ((D_HEIGHT === IPHONE12_HEIGHT && D_WIDTH === IPHONE12_WIDTH) ||
-            (D_HEIGHT === IPHONE12_WIDTH && D_WIDTH === IPHONE12_HEIGHT))
+            (D_HEIGHT === IPHONE12_WIDTH && D_WIDTH === IPHONE12_HEIGHT)) ||
+        ((D_HEIGHT === IPHONE12MAX_HEIGHT && D_WIDTH === IPHONE12MAX_WIDTH) ||
+            (D_HEIGHT === IPHONE12MAX_WIDTH && D_WIDTH === IPHONE12MAX_HEIGHT)) ||
+        ((D_HEIGHT === IPHONE12MINI_HEIGHT && D_WIDTH === IPHONE12MINI_WIDTH) ||
+            (D_HEIGHT === IPHONE12MINI_WIDTH && D_WIDTH === IPHONE12MINI_HEIGHT))
     );
 })();
 

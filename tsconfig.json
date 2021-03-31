@@ -10,6 +10,7 @@
       "sourceMap": true,
       "watch": false,
       "resolveJsonModule": true,
+      "skipLibCheck": true,
       "allowSyntheticDefaultImports": true,
       "lib": [
         "es2015.promise",
@@ -26,4 +27,3 @@
       "node_modules"
     ]
   }
-  

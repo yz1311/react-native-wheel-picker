@@ -69,6 +69,7 @@ export default class CommonPicker extends Component<IProps,IState> {
         let newState = this._getStateFromProps(newProps);
         this.setState(newState,()=>{
             if(this.pickerStyle == 'cascade') {
+                //@ts-ignore
                 this._getCascadeData(newProps.pickerData,true, newProps.selectedValue);
             }
         });
@@ -108,7 +109,7 @@ export default class CommonPicker extends Component<IProps,IState> {
         }
         let pickerStyle = pickerData.constructor === Array ? 'parallel' : 'cascade';
         let wheelSelectedIndexes;
-        let cascadeData = {};
+        let cascadeData = {wheelDatas: undefined};
         if (pickerStyle === 'parallel') {
             wheelSelectedIndexes = Array.from({ length: pickerData.length });
             //是否是单列数据
