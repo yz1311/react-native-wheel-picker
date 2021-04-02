@@ -7,12 +7,6 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
-    Text,
-    Animated,
-    Platform,
-    Dimensions,
-    PickerIOS,
-    ViewPropTypes, StyleProp, ViewStyle, TextStyle,
 } from 'react-native';
 //@ts-ignore
 import WheelCurvedPicker from '../WheelCurvedPicker';
@@ -20,7 +14,7 @@ import PickerHeader from './PickerHeader';
 import {ICommonPickerProps as IProps} from '../types';
 import {isIPhoneX} from './utils';
 
-const Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
+const Picker = WheelCurvedPicker;
 let PickerItem = Picker.Item;
 
 
