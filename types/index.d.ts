@@ -138,6 +138,10 @@ export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProp
      * 包裹picker的容器的样式
      */
     pickerWrapperStyle?: StyleProp<ViewStyle>;
+    /**
+     * 单个wheel的样式
+     */
+    wheelStyles?: Array<StyleProp<ViewStyle>>;
     pickerElevation?: number;
     /**
      * picker数据

@@ -38,6 +38,7 @@ export default class CommonPicker extends Component<IProps,IState> {
 
     static defaultProps = {
         showHeader: true,
+        wheelStyles: [],
         pickerConfirmBtnText: '确定',
         pickerCancelBtnText: '取消',
         selectedValue: []
@@ -308,8 +309,9 @@ export default class CommonPicker extends Component<IProps,IState> {
 
     _renderParallelWheel(pickerData){
         return pickerData.map((item, index) => {
+            const wheelStyle = (this.props.wheelStyles || [])[index] || {};
             return (
-                <View style={styles.pickerWheel} key={index}>
+                <View key={index} style={[styles.pickerWheel, wheelStyle]}>
                     <Picker
                         selectedValue={this.state.wheelSelectedIndexes[index]}
                         onValueChange={valueIndex => {
@@ -335,8 +337,9 @@ export default class CommonPicker extends Component<IProps,IState> {
             <View style={[styles.pickerWrap]}>
                 {
                     this.state.wheelDatas&&(this.state.wheelSelectedIndexes||[]).map((x,index)=>{
+                        const wheelStyle = (this.props.wheelStyles || [])[index] || {};
                         return (
-                            <View key={index} style={styles.pickerWheel}>
+                            <View key={index} style={[styles.pickerWheel, wheelStyle]}>
                                 <Picker
                                     ref={ref=>this.wheelRefs[index]=ref}
                                     selectedValue={this.state.wheelSelectedIndexes[index]}
