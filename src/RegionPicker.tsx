@@ -5,6 +5,7 @@
 import React, {forwardRef, PureComponent} from "react";
 import CommonPicker from "./CommonPicker";
 import pca from './resource/pca-code.json';
+import pc from './resource/pc-code.json';
 import {IRegionPickerProps as IProps} from '../types';
 
 
@@ -31,20 +32,29 @@ export default class RegionPicker extends PureComponent<IProps,IState>{
     componentDidMount(): void {
         let pickerData:any = {};
         //支持外部源
-        let source = this.props.data || pca;
+        let source = this.props.data;
         switch (this.props.mode) {
           case "p":
+            if(!source) {
+               source = pc;
+            }
             pickerData = [];
             for (let province of source) {
               pickerData.push(province.name);
             }
             break;
           case "pc":
+            if(!source) {
+               source = pc;
+            }
             for (let province of source) {
               pickerData[province.name] = (province.children||[]).map(x=>x.name);
             }
             break;
           case "pca":
+            if(!source) {
+               source = pca;
+            }
             for (let province of source) {
               pickerData[province.name] = {};
               if(province.children&&province.children.length>0) {

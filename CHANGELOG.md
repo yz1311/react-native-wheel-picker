@@ -1,3 +1,13 @@
+# [0.3.3]() (2021-05-25)
+原本以为[Administrative-divisions-of-China](https://github.com/modood/Administrative-divisions-of-China)
+的省市数据可以直接从省市区中拆分出来，但是发现该库其实对省市进行了单独的处理，譬如在pca中，
+仙桃市是湖北省-省直辖县级行政区划-仙桃市，而pc中是湖北省-仙桃市，所以还是有必要单独使用pc的数据
+
+<font color=red>该处升级可能会对已保存的数据产生影响(只针对使用pc模式)</font>
+
+* 将RegionPicker的pc模式的数据源改为单独的文件
+* CommonPicker添加wheelStyles属性，加大DatePicker mode=datetime时年份的宽度
+
 # [0.3.2]() (2021-04-02)
 * 彻底解决PickerIOS的警告问题，并兼容老的RN版本
 
