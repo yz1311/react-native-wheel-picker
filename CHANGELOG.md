@@ -1,3 +1,9 @@
+# [0.3.4]() (2021-05-27)
+
+<font color=red>该版本更改了android原生，需要重新打包更新，但无破坏性更新</font>
+
+* 修复部分手机默认选中状态错误的问题[#27](https://github.com/yz1311/react-native-wheel-picker/issues/27)
+
 # [0.3.3]() (2021-05-25)
 原本以为[Administrative-divisions-of-China](https://github.com/modood/Administrative-divisions-of-China)
 的省市数据可以直接从省市区中拆分出来，但是发现该库其实对省市进行了单独的处理，譬如在pca中，
