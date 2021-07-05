@@ -1,3 +1,8 @@
+# [0.3.5]() (2021-07-05)
+
+* 修复itemStyle属性没有传递给picker[#29](https://github.com/yz1311/react-native-wheel-picker/issues/29) ([75cedbdd07](https://github.com/yz1311/react-native-wheel-picker/commit/75cedbdd077ee2b057e9c1857ad6d2528aaf553d) by [songhlc](https://github.com/yz1311/react-native-wheel-picker/commits?author=songhlc))
+
+
 # [0.3.4]() (2021-05-27)
 
 <font color=red>该版本更改了android原生，需要重新打包更新，但无破坏性更新</font>
