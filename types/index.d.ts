@@ -128,7 +128,7 @@ interface IPickerModalProps {
 }
 
 
-export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProps {
+export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProps, Pick<PickerProps, 'itemStyle'> {
     style?: StyleProp<ViewStyle>;
     /**
      * 默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
