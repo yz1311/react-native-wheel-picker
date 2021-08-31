@@ -1,3 +1,8 @@
+# [0.3.6]() (2021-08-31)
+
+* 修复itemStyle android下选中颜色设置无效的问题[#31](https://github.com/yz1311/react-native-wheel-picker/issues/31) 
+
+
 # [0.3.5]() (2021-07-05)
 
 * 修复itemStyle属性没有传递给picker[#29](https://github.com/yz1311/react-native-wheel-picker/issues/29) ([75cedbdd07](https://github.com/yz1311/react-native-wheel-picker/commit/75cedbdd077ee2b057e9c1857ad6d2528aaf553d) by [songhlc](https://github.com/yz1311/react-native-wheel-picker/commits?author=songhlc))

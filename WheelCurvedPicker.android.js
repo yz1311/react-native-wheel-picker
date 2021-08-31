@@ -92,7 +92,7 @@ class WheelCurvedPicker extends React.Component {
         onValueChange={this._onValueChange}
         data={this.state.items}
         textColor={this.state.textColor || "#333"}
-        selectTextColor={"#000"}
+        selectTextColor={this.state.textColor || "#000"}
         textSize={this.state.textSize}
         selectedIndex={parseInt(this.state.selectedIndex)}
       />
