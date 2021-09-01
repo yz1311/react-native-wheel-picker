@@ -1,6 +1,10 @@
-# [0.3.7]() (2021-09-01)
+# [0.3.8]() (2021-09-01)
 
 * 修复DatePicker和DateRangePicker没有继承CommonPicker相关属性的问题
+
+# [0.3.7]() (2021-09-01)
+
+~~* 修复DatePicker和DateRangePicker没有继承CommonPicker相关属性的问题~~
 
 # [0.3.6]() (2021-08-31)
 

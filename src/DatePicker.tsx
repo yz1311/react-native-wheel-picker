@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import moment from "moment";
 import CommonPicker from "./CommonPicker";
-import PickerHeader from './PickerHeader';
 import {IDatePickerProps as IProps} from '../types';
 
 
@@ -327,59 +326,21 @@ export default class DatePicker extends PureComponent<IProps,IState>{
     }
 
     render () {
-        const {mode, labelUnit, isModal, modalProps, modalVisible, onModalVisibleChange} = this.props;
         const { width: deviceWidth } = Dimensions.get('window');
-        const pickerView = (
-            <View style={[{minHeight:240+(this.props.showHeader?40:0)},this.props.style]}>
-                {this.props.showHeader ?
-                    <PickerHeader
-                        {...this.props}
-                        onPickerConfirm={()=>{
-                            this.props.onPickerConfirm&&this.props.onPickerConfirm(this.targetDate);
-                        }}
-                    />
-                    :
-                    null
-                }
-                {this.state.pickerData.length > 0 ?
-                    <CommonPicker
-                        {...this.props}
-                        style={{width: deviceWidth}}
-                        wheelStyles={this.props.mode === 'datetime'?[{minWidth: 20}]:[]}
-                        showHeader={false}
-                        pickerData={this.state.pickerData}
-                        selectedValue={this.state.selectedDateArray}
-                        onValueChange={(value, wheelIndex) => {
-                            this._onDateChange(value, wheelIndex);
-                        }}
-                    />
-                    :
-                    <View style={[{flex:1, backgroundColor:'white', justifyContent:'center', alignItems:'center'}, this.props.pickerWrapperStyle]}>
-                        <Text style={{fontSize: 16, color:'#999999'}}>数据异常,请检查参数</Text>
-                    </View>
-                }
-            </View>
+        return (
+            <CommonPicker
+                {...this.props}
+                style={[{width: deviceWidth}, this.props.style]}
+                wheelStyles={this.props.mode === 'datetime'?[{minWidth: 20}]:[]}
+                pickerData={this.state.pickerData}
+                selectedValue={this.state.selectedDateArray}
+                onValueChange={(value, wheelIndex) => {
+                    this._onDateChange(value, wheelIndex);
+                }}
+                onPickerConfirm={()=>{
+                    this.props.onPickerConfirm&&this.props.onPickerConfirm(this.targetDate);
+                }}
+            />
         );
-        if(isModal) {
-            const Modal = require('react-native-modal').default;
-            if(Modal) {
-                return (
-                    <Modal
-                        onBackdropPress={()=>{
-                            onModalVisibleChange&&onModalVisibleChange(false);
-                        }}
-                        onBackButtonPress={()=>{
-                            onModalVisibleChange&&onModalVisibleChange(false);
-                        }}
-                        {...(modalProps||{})}
-                        style={[{flex:1, justifyContent:'flex-end',margin: 0}, (modalProps||{style: undefined}).style]}
-                        isVisible={modalVisible}
-                    >
-                        {pickerView}
-                    </Modal>
-                );
-            }
-        }
-        return pickerView;
     }
 }

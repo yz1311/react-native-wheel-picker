@@ -102,6 +102,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                         <View style={{flexDirection:'row',paddingHorizontal:8}}>
                             <DatePicker
                                 {...this.props}
+                                isModal={false}
                                 style={[localStyles.picker]}
                                 showHeader={false}
                                 pickerWrapperStyle={[localStyles.picker,{marginLeft:20}]}
@@ -128,6 +129,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                         <View style={{flexDirection:'row',paddingHorizontal:8}}>
                             <DatePicker
                                 {...this.props}
+                                isModal={false}
                                 style={[localStyles.picker]}
                                 showHeader={false}
                                 pickerWrapperStyle={[localStyles.picker,{marginLeft:20}]}
