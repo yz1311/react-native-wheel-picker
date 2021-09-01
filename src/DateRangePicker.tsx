@@ -101,6 +101,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                     {this.state.activeIndex==1?
                         <View style={{flexDirection:'row',paddingHorizontal:8}}>
                             <DatePicker
+                                {...this.props}
                                 style={[localStyles.picker]}
                                 showHeader={false}
                                 pickerWrapperStyle={[localStyles.picker,{marginLeft:20}]}
@@ -126,6 +127,7 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                     {this.state.activeIndex==2?
                         <View style={{flexDirection:'row',paddingHorizontal:8}}>
                             <DatePicker
+                                {...this.props}
                                 style={[localStyles.picker]}
                                 showHeader={false}
                                 pickerWrapperStyle={[localStyles.picker,{marginLeft:20}]}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleProp, TextStyle, ViewProps, ViewStyle } from 'react-native';
+import {Omit, StyleProp, TextStyle, ViewProps, ViewStyle} from 'react-native';
 import { Component } from 'react';
 import {ModalProps} from 'react-native-modal';
 
@@ -179,7 +179,7 @@ export class RegionPicker extends React.Component<IRegionPickerProps,any>{
 
 }
 
-export interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfirm'|'pickerData'|'selectedValue'>, IPickerModalProps {
+export interface IDatePickerProps extends Omit<ICommonPickerProps, 'selectedValue'|'onValueChange'|'pickerData'|'onPickerConfirm'> {
     //年月日单位，默认为：年 月 日 时 分 秒
     labelUnit?: {
         year?: string,
@@ -200,15 +200,6 @@ export interface IDatePickerProps extends Omit<IPickerHeaderProps,'onPickerConfi
      */
     mode?: 'year' | 'month' | 'date' | 'time' | 'datetime',
     onDateChange?: (value:Date)=>void,
-    style?: StyleProp<ViewStyle>,
-    /**
-     * 默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效
-     */
-    showHeader?: boolean,
-    /**
-     * 包裹picker的容器的样式
-     */
-    pickerWrapperStyle?: StyleProp<ViewStyle>,
     /**
      * 确定回调事件
      * 无论哪种模式均返回一个date对象，需要自己格式化数据
@@ -220,7 +211,7 @@ export class DatePicker extends React.Component<IDatePickerProps,any> {
 
 }
 
-export interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'>, IPickerModalProps {
+export interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueChange'|'onPickerConfirm'|'pickerData'|'selectedValue'> {
     /**
      * 验证选择的时间段是否合法，返回包含结果和信息的对象
      */
@@ -271,7 +262,6 @@ export interface IDateRangePickerProps extends Omit<ICommonPickerProps,'onValueC
      * 结束时间的最大时间
      */
     endMaxDate?: Date | string,
-    style?: StyleProp<ViewStyle>,
 }
 
 export class DateRangePicker extends React.Component<IDateRangePickerProps,any> {

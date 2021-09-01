@@ -1,3 +1,7 @@
+# [0.3.7]() (2021-09-01)
+
+* 修复DatePicker和DateRangePicker没有继承CommonPicker相关属性的问题
+
 # [0.3.6]() (2021-08-31)
 
 * 修复itemStyle android下选中颜色设置无效的问题[#31](https://github.com/yz1311/react-native-wheel-picker/issues/31) 
