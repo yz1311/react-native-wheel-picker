@@ -37,11 +37,19 @@ interface PickerProps extends ViewProps {
     /**
      * 默认选中的值。可以是字符串或整数。
      */
-    selectedValue: number | string,
+    selectedValue: number | string;
     /**
      * 某一项被选中时执行此回调
      */
-    onValueChange: (value: number | string) => any,
+    onValueChange: (value: number | string) => any;
+    /**
+     * 设置滚轮选择器是否显示指示器 (android only)
+     */
+    indicator?: boolean;
+    /**
+     * 设置滚轮选择器指示器颜色 (android only)
+     */
+    indicatorColor?: string;
 }
 
 
@@ -50,7 +58,8 @@ interface PickerProps extends ViewProps {
  * 所以其他Picker组件均基于该组件进行封装
  */
 export default class WheelPicker extends React.Component<PickerProps,any> {
-    static Item: typeof PickerIOSItem
+    static Item: typeof PickerIOSItem;
+    static defaultProps: Partial<PickerProps>;
 }
 
 /**
@@ -128,7 +137,7 @@ interface IPickerModalProps {
 }
 
 
-export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProps, Pick<PickerProps, 'itemStyle'> {
+export interface ICommonPickerProps extends IPickerHeaderProps, IPickerModalProps, Pick<PickerProps, 'itemStyle'|'indicator'|'indicatorColor'> {
     style?: StyleProp<ViewStyle>;
     /**
      * 默认值为true，如果设为false，则IPickerHeaderProps里面的属性均无效

@@ -27,13 +27,19 @@ class WheelCurvedPicker extends React.Component {
 
     selectedValue: PropTypes.any,
 
-    selectedIndex: PropTypes.number
+    selectedIndex: PropTypes.number,
+
+    indicator: PropTypes.bool,
+
+    indicatorColor: PropTypes.string,
   };
 
   static defaultProps = {
     itemStyle: { color: "black", fontSize: 18 },
     itemSpace: 20,
-    data: [""] //android下为空会直接报错,ios没问题，所以必须设置一个空值
+    data: [""], //android下为空会直接报错,ios没问题，所以必须设置一个空值
+    indicator: true,
+    indicatorColor: '#e1e1e1'
   };
 
   dataIsNumber = false;
@@ -82,20 +88,18 @@ class WheelCurvedPicker extends React.Component {
 
   render() {
     return (
-      <WheelCurvedPickerNative
-        {...this.props}
-        style={[styles.picker, this.props.style]}
-        curtainColor={"#999999"}
-        indicator={true}
-        indicatorColor={"#e1e1e1"}
-        curved={true}
-        onValueChange={this._onValueChange}
-        data={this.state.items}
-        textColor={this.state.textColor || "#333"}
-        selectTextColor={this.state.textColor || "#000"}
-        textSize={this.state.textSize}
-        selectedIndex={parseInt(this.state.selectedIndex)}
-      />
+        <WheelCurvedPickerNative
+            {...this.props}
+            style={[styles.picker, this.props.style]}
+            curtainColor={"#999999"}
+            curved={true}
+            onValueChange={this._onValueChange}
+            data={this.state.items}
+            textColor={this.state.textColor || "#333"}
+            selectTextColor={this.state.textColor || "#000"}
+            textSize={this.state.textSize}
+            selectedIndex={parseInt(this.state.selectedIndex)}
+        />
     );
   }
 }
@@ -120,8 +124,8 @@ const styles = StyleSheet.create({
 });
 
 var WheelCurvedPickerNative = requireNativeComponent(
-  "WheelCurvedPicker",
-  WheelCurvedPicker
+    "WheelCurvedPicker",
+    WheelCurvedPicker
 );
 
 export default WheelCurvedPicker;
