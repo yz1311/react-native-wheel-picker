@@ -18,6 +18,16 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+    google()
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$rootDir/../node_modules/react-native/android"
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
