@@ -64,6 +64,11 @@ Modify MainApplication
         );
     }
 ```
+## React Native Web集成
+
+参考react-native-web文档集成web打包配置: https://necolas.github.io/react-native-web/docs/multi-platform/
+
+接入rn web可参考项目: [jaredpalmer/razzle](https://github.com/jaredpalmer/razzle/tree/master/examples/with-react-native-web)、[rn-web-template](https://github.com/282931/rn-web-template)、[luna](https://github.com/criszz77/luna)
 
 # 介绍
 该库(>=0.2.0)提供了多种Picker，全部均是view，相比直接提供Modal+picker的模式，单纯的picker view更加灵活,想怎么组合都行
