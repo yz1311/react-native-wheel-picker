@@ -31,7 +31,6 @@ class Picker extends React.Component {
 
   onItemLayout = (e) => {
     const { height, width } = e.nativeEvent.layout;
-    console.log('onItemLayout', height);
     if (this.itemHeight !== height || this.itemWidth !== width) {
       this.itemWidth = width;
       if (this.indicatorRef) {
@@ -72,13 +71,9 @@ class Picker extends React.Component {
     }
   };
   shouldComponentUpdate(nextProps) {
-    console.log(this.props.selectedValue !== nextProps.selectedValue);
-    console.log(this.props.children !== nextProps.children);
-
     return this.props.selectedValue !== nextProps.selectedValue || this.props.children !== nextProps.children;
   }
   componentDidUpdate() {
-    console.log('componentDidUpdate');
     this.select(this.props.selectedValue, this.itemHeight, this.scrollTo);
   }
 
@@ -93,7 +88,6 @@ class Picker extends React.Component {
   }
 
   scrollTo = (y) => {
-    console.log(y);
     if (this.scrollerRef) {
       this.scrollerRef.scrollTo({
         y,
@@ -118,7 +112,6 @@ class Picker extends React.Component {
   };
 
   select = (value, itemHeight, scrollTo) => {
-    console.log('select', value, itemHeight, scrollTo);
     const children = React.Children.toArray(this.props.children);
     for (let i = 0, len = children.length; i < len; i++) {
       if (children[i].props.value === value) {
@@ -142,7 +135,6 @@ class Picker extends React.Component {
   }
 
   doScrollingComplete = (top, itemHeight, fireValueChange) => {
-    console.log(top, itemHeight, fireValueChange);
     const children = React.Children.toArray(this.props.children);
     const index = this.computeChildIndex(top, itemHeight, children.length);
     const child = children[index];
@@ -155,7 +147,6 @@ class Picker extends React.Component {
 
   render() {
     const { children, itemStyle, selectedValue, style, indicatorColor, indicator } = this.props;
-    console.log(children);
     const items = React.Children.map(children, (item, index) => {
       const totalStyle = [styles.itemText];
       if (selectedValue === item.props.value) {
