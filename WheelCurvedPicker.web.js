@@ -205,12 +205,14 @@ const styles = StyleSheet.create({
   selectedItemText: {
     fontSize: 20,
     fontWeight: 'bold',
+    opacity: 1,
     color: '#000',
   },
 
   itemText: {
     fontSize: 20,
-    color: '#aaa',
+    opacity: 0.5,
+    color: '#000',
     textAlign: 'center',
   },
 });
