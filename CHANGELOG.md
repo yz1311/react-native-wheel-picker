@@ -1,4 +1,4 @@
-# [0.4.0]() (2021-09-01)
+# [0.4.0]() (2022-05-24)
 
 * 支持react-native-web (@[yatessss](https://github.com/yatessss))
 
