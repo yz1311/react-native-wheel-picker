@@ -1,3 +1,11 @@
+# [0.4.0]() (2021-09-01)
+
+* 支持react-native-web (@[yatessss](https://github.com/yatessss))
+
+# [0.3.9]() (2021-10-27)
+
+* 暴露indicator、indicatorColor两个属性，完成 [#43](https://github.com/yz1311/react-native-wheel-picker/issues/43)
+
 # [0.3.8]() (2021-09-01)
 
 * 修复DatePicker和DateRangePicker没有继承CommonPicker相关属性的问题
