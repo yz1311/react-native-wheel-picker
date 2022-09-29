@@ -3,11 +3,11 @@
 import React from "react";
 import {
   View,
-  ColorPropType,
   requireNativeComponent,
   StyleSheet
 } from "react-native";
 import PropTypes from "prop-types";
+import {ColorPropType} from 'deprecated-react-native-prop-types';
 
 class WheelCurvedPicker extends React.Component {
   static propTypes = {

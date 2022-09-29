@@ -1,6 +1,6 @@
 {
   "name": "@yz1311/react-native-wheel-picker",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "React native cross platform picker.",
   "main": "index.js",
   "types": "types/index.d.ts",
@@ -45,6 +45,7 @@
   },
   "peerDependencies": {
     "moment": "*",
+    "deprecated-react-native-prop-types": "*",
     "react-native": "^0.63.4",
     "react-native-modal": "^11.7.0"
   }

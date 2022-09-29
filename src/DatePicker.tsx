@@ -4,10 +4,8 @@
 
 import React, {FC, PureComponent} from "react";
 import {
-    ColorPropType,
     StyleProp,
     View,
-    ViewPropTypes,
     ViewStyle,
     Dimensions,
     Text

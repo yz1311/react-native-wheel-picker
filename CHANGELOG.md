@@ -1,3 +1,7 @@
+# [0.4.2]() (2022-09-30)
+
+* 修复对RN0.69+的支持
+
 # [0.4.1]() (2022-05-24)
 
 * 支持react-native-web (@[yatessss](https://github.com/yatessss))
