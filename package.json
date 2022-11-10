@@ -46,7 +46,7 @@
   "peerDependencies": {
     "moment": "*",
     "deprecated-react-native-prop-types": "*",
-    "react-native": "^0.63.4",
-    "react-native-modal": "^11.7.0"
+    "react-native": "*",
+    "react-native-modal": "*"
   }
 }
