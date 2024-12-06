@@ -1,6 +1,6 @@
 {
   "name": "@yz1311/react-native-wheel-picker",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "React native cross platform picker.",
   "main": "index.js",
   "types": "types/index.d.ts",
