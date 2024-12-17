@@ -6,7 +6,7 @@
 
 该库最开始基于[react-native-wheel-picker](https://github.com/lesliesam/react-native-wheel-picker) ，修改和拓展了很多功能
 
-> android端基于[WheelPicker](https://github.com/AigeStudio/WheelPicker) 1.1.2版本(注意不要手动升级到1.1.3)进行封装
+> android端基于[WheelPicker](https://github.com/AigeStudio/WheelPicker) 1.1.2版本(~~注意不要手动升级到1.1.3~~ 0.4.3版本已集成aar)进行封装
 
 > ios端基于RN自带的PickerIOS进行封装(从0.3.0已将PickerIOS的代码放在项目中)
 
