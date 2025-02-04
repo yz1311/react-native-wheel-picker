@@ -79,6 +79,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                     <Text style={{marginHorizontal:6,color: '#666666'}}>至</Text>
                     <TimeBaseView style={{flex:1}} index={2} activeIndex={this.state.activeIndex} onPress={this.timeClick} date={this.state.endDate}/>
                 </View>
+                {
+                  this.props.showTrash &&  
                 <View style={{height:40,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                     {this.props.errorMessage?
                         <Text style={{alignSelf:'center',color:'#ff4141',fontSize:14,marginLeft:10}}>{this.props.errorMessage}</Text>
@@ -93,6 +95,8 @@ export default class DateRangePicker extends PureComponent<IProps,any>{
                         <Image style={{width:20,height:20}} resizeMode='contain' source={require('./resource/trash.png')} />
                     </TouchableOpacity>
                 </View>
+                }
+                
                 <View style={{minHeight:220,flex:1}}>
                     {this.state.activeIndex!=0?
                         <View
