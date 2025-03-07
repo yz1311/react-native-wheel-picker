@@ -1,3 +1,17 @@
+
+
+# [0.4.4]() (2025-03-07)
+
+* 修复release后闪退的问题
+* 增加对New Architecture的支持
+
+> 注意，android/app/build.gradle中需要添加
+```
+dependencies {
+    implementation fileTree(dir: '../../node_modules/@yz1311/react-native-wheel-picker/android/libs', include: ['*.aar'])
+}
+```
+
 # [0.4.2]() (2022-09-30)
 
 * 修复对RN0.69+的支持

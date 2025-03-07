@@ -27,6 +27,15 @@
 npm i @yz1311/react-native-wheel-picker  moment react-native-modal --save
 ```
 
+<font color=red>在android/app/build.gradle中添加</font>
+```
+dependencies {
+    //需要添加这一行
+    implementation fileTree(dir: '../../node_modules/@yz1311/react-native-wheel-picker/android/libs', include: ['*.aar'])
+}
+
+```
+
 ## 自动集成
 
 RN>=0.60
