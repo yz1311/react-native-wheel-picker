@@ -18,6 +18,8 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.common.UIManagerType;
 
 import java.util.List;
 
@@ -35,7 +37,15 @@ public class ReactWheelCurvedPicker extends WheelPicker {
 //         }
     public ReactWheelCurvedPicker(ReactContext reactContext) {
         super(reactContext);
-        mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+        // 通过判断是否能获取到 UIManagerModule 来确定架构类型
+        UIManagerModule uiManagerModule = reactContext.getNativeModule(UIManagerModule.class);
+        if (uiManagerModule == null) {
+             // 如果无法获取 UIManagerModule，说明是新架构
+            mEventDispatcher = UIManagerHelper.getUIManager(reactContext, UIManagerType.FABRIC).getEventDispatcher();
+        } else {
+            // 能获取到 UIManagerModule，说明是旧架构
+            mEventDispatcher = uiManagerModule.getEventDispatcher();
+        }
         setOnWheelChangeListener(new OnWheelChangeListener() {
             @Override
             public void onWheelScrolled(int offset) {
