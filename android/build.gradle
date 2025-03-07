@@ -29,6 +29,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'com.facebook.react:react-native:+'
 }
