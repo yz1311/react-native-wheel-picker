@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Omit, StyleProp, TextStyle, ViewProps, ViewStyle} from 'react-native';
+import {StyleProp, TextStyle, ViewProps, ViewStyle} from 'react-native';
 import { Component } from 'react';
 import {ModalProps} from 'react-native-modal';
 
