@@ -50,7 +50,10 @@ class WheelCurvedPicker extends React.Component {
   }
 
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-    if(prevProps !== this.props) {
+    if (
+      prevProps.selectedValue !== this.props.selectedValue ||
+      prevProps.children !== this.props.children
+    ) {
       this.setState(this._stateFromProps(this.props));
     }
   }
