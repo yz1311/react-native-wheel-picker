@@ -57,6 +57,9 @@ export default class DatePicker extends PureComponent<IProps,IState>{
             this.props.minDate !== prevProps.minDate ||
             this.props.maxDate !== prevProps.maxDate) {
             this._setDefaultValue();
+            this.setState({
+                pickerData: this._genData()
+            });
         }
     }
 
