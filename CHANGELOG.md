@@ -1,4 +1,9 @@
 
+# [0.4.5]() (2025-07-02)
+
+* 修复对新版本RN android下运行报错问题 [#83](https://github.com/yz1311/react-native-wheel-picker/issues/83) [#84](https://github.com/yz1311/react-native-wheel-picker/issues/84)
+* DatePicker在minDate maxDate动态变化的时候，刷新数据
+
 
 # [0.4.4]() (2025-03-07)
 
